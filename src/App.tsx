@@ -9,11 +9,12 @@ import Header from './components/dashboard/Header';
 import Home from './components/dashboard/Home';
 import About from './components/about/About';
 import Shop from './components/shop/Shop';
+import Travel from './components/travel/Travel';
 import Categories from './components/categories/Categories';
-import Service from './components/service/Service';
 import Contact from './components/contact/Contact';
 
 import './App.css';
+
 
 const App: React.FC = () => {
   return (
@@ -26,7 +27,7 @@ const App: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/categories" element={<Categories />} />
-          <Route path="/service" element={<Service />} />
+          <Route path="/travel" element={<Travel />} />
           <Route path="/contact" element={<Contact />} />
           {/* If you want a 404 page later:
             <Route path="*" element={<NotFound />} />

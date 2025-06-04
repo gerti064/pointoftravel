@@ -54,7 +54,7 @@
 .header-container {
   max-width: 1280px; /* 7xl */
   margin: 0 auto;
-  height: 4rem;
+  height: 5rem;
   padding: 0 1rem; /* default 16px */
 }
 
@@ -75,12 +75,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 64px;
+  height: 80px;
 }
 
 /* Logo image sizing */
 .header-logo img {
-  height: 32px; /* same as Tailwind h-8 */
+  height: 60px; /* same as Tailwind h-8 */
   width: auto;
   transition: transform 0.3s ease;
 }

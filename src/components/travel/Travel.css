@@ -1,0 +1,176 @@
+/* src/components/Travel/Travel.css */
+
+/* ==== Color Palette (from header.css) ==== */
+:root {
+  --purple-1: #794d98;
+  --purple-2: #6b4487;
+  --purple-3: #5e3b76;
+  --purple-4: #503365;
+  --purple-5: #432b55;
+  --purple-6: #362244;
+  --purple-7: #281a33;
+  --purple-8: #1b1122;
+  --purple-9: #0d0811;
+  --purple-10: #000000;
+
+  --white: #ffffff;
+  --light-gray: #f8f8f8;
+  --border-gray: #e0e0e0;
+  --input-bg: #ffffff;
+  --input-placeholder: #aaa;
+}
+
+/* ==== Form Container ==== */
+.travel-form-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: var(--light-gray);
+  min-height: 100vh;
+}
+
+.travel-form {
+  background-color: var(--white);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 600px;
+  width: 100%;
+  padding: 2rem 2.5rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--purple-7);
+}
+
+/* ==== Form Heading ==== */
+.travel-form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--purple-2);
+  position: relative;
+}
+.travel-form h2::after {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 3px;
+  background-color: var(--purple-3);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* ==== General Field Styles ==== */
+.travel-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+.travel-form .form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--purple-4);
+}
+.travel-form .form-group input,
+.travel-form .form-group select {
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--border-gray);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: var(--input-bg);
+  color: var(--purple-9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.travel-form .form-group input::placeholder,
+.travel-form .form-group select::placeholder {
+  color: var(--input-placeholder);
+}
+
+.travel-form .form-group input:focus,
+.travel-form .form-group select:focus {
+  outline: none;
+  border-color: var(--purple-2);
+  box-shadow: 0 0 0 3px rgba(107, 68, 135, 0.2);
+}
+
+/* ==== Two-Column Row ==== */
+.travel-form .form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.travel-form .form-row .form-group {
+  flex: 1 1 200px;
+}
+
+/* ==== Full-Width Field ==== */
+.travel-form .full-width {
+  width: 100%;
+}
+
+/* ==== Special Field: Radio/Checkbox Container ==== */
+.travel-form .options-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.travel-form .options-row .option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--purple-5);
+}
+.travel-form .options-row input[type="radio"],
+.travel-form .options-row input[type="checkbox"] {
+  accent-color: var(--purple-3);
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+/* ==== Submit Button ==== */
+.travel-form .submit-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 0;
+  margin-top: 1.5rem;
+  background-color: var(--purple-2);
+  color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.travel-form .submit-btn:hover {
+  background-color: var(--purple-3);
+}
+.travel-form .submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* ==== Responsive Adjustments ==== */
+@media (max-width: 640px) {
+  .travel-form {
+    padding: 1.5rem 1rem;
+  }
+  .travel-form h2 {
+    font-size: 1.5rem;
+  }
+  .travel-form .form-row {
+    flex-direction: column;
+  }
+}
+
+/* ==== Example: Background Accent Box ==== */
+.travel-form .accent-box {
+  background-color: var(--purple-6);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+}

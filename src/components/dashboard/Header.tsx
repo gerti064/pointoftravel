@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './header.css';
-import LogoImg from '../../assets/react.svg'; // adjust if your path is different
+import LogoImg from '../../assets/logo.png'; // adjust if your path is different
 
 type NavItem = {
   name: string;
@@ -14,7 +14,7 @@ const navItems: NavItem[] = [
   { name: 'About', to: '/about' },
   { name: 'Shop', to: '/shop' },
   { name: 'Categories', to: '/categories' },
-  { name: 'Service', to: '/service' },
+  { name: 'Travel', to: '/travel' },
   { name: 'Contact', to: '/contact' },
 ];
 
