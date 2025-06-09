@@ -1,87 +1,131 @@
 // src/components/dashboard/Home.tsx
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import './Home.css';
 import { Link } from 'react-router-dom';
 
+import slide4 from '../../assets/slide4.jpg';
+import slide5 from '../../assets/slide5.jpg';
+import slide6 from '../../assets/slide6.webp';
+import slide7 from '../../assets/slide7.jpg';
+
+const slides = [
+  { id: 1, image: slide4 },
+  { id: 2, image: slide5 },
+  { id: 3, image: slide6 },
+  { id: 4, image: slide7 },
+];
+
 const Home: React.FC = () => {
+  const [current, setCurrent] = useState(0);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearTimeout(timeoutRef.current);
+  }, [current]);
+
+  const goTo = (index: number) => {
+    clearTimeout(timeoutRef.current);
+    setCurrent(index);
+  };
+
+  const prevSlide = () => goTo((current - 1 + slides.length) % slides.length);
+  const nextSlide = () => goTo((current + 1) % slides.length);
+
   return (
-    <section className="pt-16 pb-12 bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 text-center">
-        {/* Hero Heading */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">
-          Welcome to Point of Travel
-        </h1>
-        {/* Subtitle */}
-        <p className="text-lg text-gray-600 mb-8">
+    <div className='home-section'>
+    
+      {/* Slider Background */}
+      <div className="slider-container">
+        <div
+          className="slider-wrapper"
+          style={{ transform: `translateX(-${current * 100}%)` }}
+        >
+          {slides.map((s) => (
+            <div
+              key={s.id}
+              className="slide"
+              style={{ backgroundImage: `url(${s.image})` }}
+            />
+          ))}
+        </div>
+        <button className="slider-arrow prev" onClick={prevSlide}>&#10094;</button>
+        <button className="slider-arrow next" onClick={nextSlide}>&#10095;</button>
+        <div className="slider-dots">
+          {slides.map((_, idx) => (
+            <span
+              key={idx}
+              className={`slider-dot${idx === current ? ' active' : ''}`}
+              onClick={() => goTo(idx)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Hero Overlay */}
+      <div className="home-container">
+        <h1 className="home-title">Welcome to Point of Travel</h1>
+        <p className="home-subtitle">
           Discover amazing destinations, plan your perfect getaway, and book your next adventure—all in one place.
         </p>
-        {/* Call-to-Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link
-            to="/shop"
-            className="inline-block px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition"
-          >
+        <div className="cta-buttons">
+          <Link to="/shop" className="cta-primary">
             Browse Packages
           </Link>
-          <Link
-            to="/contact"
-            className="inline-block px-6 py-3 bg-white text-blue-600 font-medium border border-blue-600 rounded-md hover:bg-blue-50 transition"
-          >
+          <Link to="/contact" className="cta-secondary">
             Contact Us
           </Link>
         </div>
       </div>
 
-      {/* Featured Section (example cards) */}
-      <div className="mt-12 max-w-5xl mx-auto px-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="h-40 bg-cover bg-center" style={{ backgroundImage: `url('https://source.unsplash.com/featured/?beach')` }} />
-          <div className="p-4">
-            <h3 className="text-xl font-semibold mb-2">Beach Escapes</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Relax on sun-soaked beaches and crystal-clear waters.
-            </p>
-            <Link
-              to="/categories"
-              className="text-blue-600 font-medium hover:underline text-sm"
-            >
-              Explore Beaches &rarr;
-            </Link>
-          </div>
+      {/* Main Content Under Slider */}
+      <div className="content-wrapper">
+        {/* Featured Cards */}
+        <div className="featured-grid">
+          {[
+            { title: 'Beach Escapes', text: 'Relax on sun-soaked beaches and crystal-clear waters.', bg: 'beach-bg' },
+            { title: 'Mountain Adventures', text: 'Find thrills and breathtaking views in the highlands.', bg: 'mountains-bg' },
+            { title: 'City Tours', text: 'Immerse yourself in vibrant cultures and historic landmarks.', bg: 'city-bg' },
+          ].map((f) => (
+            <div key={f.title} className="feature-card">
+              <div className={`feature-card-image ${f.bg}`} />
+              <div className="feature-card-content">
+                <h3 className="feature-card-title">{f.title}</h3>
+                <p className="feature-card-text">{f.text}</p>
+                <Link to="/categories" className="feature-card-link">
+                  Explore {f.title} &rarr;
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="h-40 bg-cover bg-center" style={{ backgroundImage: `url('https://source.unsplash.com/featured/?mountains')` }} />
-          <div className="p-4">
-            <h3 className="text-xl font-semibold mb-2">Mountain Adventures</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Find thrills and breathtaking views in the highlands.
-            </p>
-            <Link
-              to="/categories"
-              className="text-blue-600 font-medium hover:underline text-sm"
-            >
-              Explore Mountains &rarr;
-            </Link>
-          </div>
+        {/* Newsletter Section */}
+        <div className="newsletter-section">
+          <h2 className="newsletter-title">Stay in the Loop</h2>
+          <form className="newsletter-form">
+            <input type="email" placeholder="Your email address" required />
+            <button type="submit">Subscribe</button>
+          </form>
         </div>
 
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="h-40 bg-cover bg-center" style={{ backgroundImage: `url('https://source.unsplash.com/featured/?city')` }} />
-          <div className="p-4">
-            <h3 className="text-xl font-semibold mb-2">City Tours</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Immerse yourself in vibrant cultures and historic landmarks.
-            </p>
-            <Link
-              to="/categories"
-              className="text-blue-600 font-medium hover:underline text-sm"
-            >
-              Explore Cities &rarr;
-            </Link>
-          </div>
+        {/* Testimonials Section */}
+        <div className="testimonial-section">
+          {[
+            { text: "Point of Travel made planning our family vacation effortless. Highly recommend!", author: '– Sarah L.' },
+            { text: "Amazing deals and fantastic customer service. We'll be back!", author: '– Mark T.' },
+          ].map((t, i) => (
+            <div key={i} className="testimonial-item">
+              <p className="testimonial-text">{t.text}</p>
+              <p className="testimonial-author">{t.author}</p>
+            </div>
+          ))}
         </div>
       </div>
-    </section>
+     
+    </div>
   );
 };
 
