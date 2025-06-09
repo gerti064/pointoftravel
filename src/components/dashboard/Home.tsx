@@ -8,11 +8,21 @@ import slide5 from '../../assets/slide5.jpg';
 import slide6 from '../../assets/slide6.webp';
 import slide7 from '../../assets/slide7.jpg';
 
+import p1 from '../../assets/p1.jpeg';
+import p2 from '../../assets/p2.jpg';
+import p3 from '../../assets/p3.jpg';
+
 const slides = [
   { id: 1, image: slide4 },
   { id: 2, image: slide5 },
   { id: 3, image: slide6 },
   { id: 4, image: slide7 },
+];
+
+const featuredItems = [
+  { title: 'Beach Escapes', text: 'Relax on sun-soaked beaches and crystal-clear waters.', image: p1 },
+  { title: 'Mountain Adventures', text: 'Find thrills and breathtaking views in the highlands.', image: p2 },
+  { title: 'City Tours', text: 'Immerse yourself in vibrant cultures and historic landmarks.', image: p3 },
 ];
 
 const Home: React.FC = () => {
@@ -36,7 +46,6 @@ const Home: React.FC = () => {
 
   return (
     <div className='home-section'>
-    
       {/* Slider Background */}
       <div className="slider-container">
         <div
@@ -66,7 +75,7 @@ const Home: React.FC = () => {
 
       {/* Hero Overlay */}
       <div className="home-container">
-        <h1 className=" lato-bold " style={{fontSize:'30px',color:'white',marginTop:'100px '}}>Welcome to, </h1>
+        <h1 className="lato-bold" style={{fontSize:'30px',color:'white',marginTop:'100px'}}>Welcome to, </h1>
         <h1 className="home-title lato-bold-italic" style={{fontSize:'5rem'}}> Point of Travel</h1>
         <p className="home-subtitle">
           Discover amazing destinations, plan your perfect getaway, and book your next adventure—all in one place.
@@ -85,13 +94,12 @@ const Home: React.FC = () => {
       <div className="content-wrapper">
         {/* Featured Cards */}
         <div className="featured-grid">
-          {[
-            { title: 'Beach Escapes', text: 'Relax on sun-soaked beaches and crystal-clear waters.', bg: 'beach-bg' },
-            { title: 'Mountain Adventures', text: 'Find thrills and breathtaking views in the highlands.', bg: 'mountains-bg' },
-            { title: 'City Tours', text: 'Immerse yourself in vibrant cultures and historic landmarks.', bg: 'city-bg' },
-          ].map((f) => (
+          {featuredItems.map((f) => (
             <div key={f.title} className="feature-card">
-              <div className={`feature-card-image ${f.bg}`} />
+              <div
+                className="feature-card-image"
+                style={{ backgroundImage: `url(${f.image})` }}
+              />
               <div className="feature-card-content">
                 <h3 className="feature-card-title">{f.title}</h3>
                 <p className="feature-card-text">{f.text}</p>
@@ -126,7 +134,6 @@ const Home: React.FC = () => {
         </div>
       </div>
     </div>
-    
   );
 };
 

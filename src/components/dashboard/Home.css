@@ -152,21 +152,23 @@ padding-bottom: 2rem;
   z-index: 1;
 }
 .cta-primary {
-  background-color: #3182ce;
+  background-color: #8252a2;
   color: #ffffff;
 }
 .cta-primary:hover {
-  background-color: #275a9a;
+  background-color: #72488e;
+  color: white;
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
 }
 .cta-secondary {
   background-color: #ffffff;
-  color: #3182ce;
+  color: #8252a2;
   border: 1px solid #3182ce;
 }
 .cta-secondary:hover {
   background-color: #eff4fb;
+  color: #8252a2;
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(0,0,0,0.1);
 }
@@ -234,7 +236,7 @@ padding-bottom: 2rem;
 }
 .feature-card-link {
   font-size: 0.875rem;
-  color: #3182ce;
+  color: #8252a2;
   font-weight: 500;
   text-decoration: none;
   align-self: flex-start;
@@ -263,7 +265,7 @@ padding-bottom: 2rem;
 .newsletter-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #5e626a;
   margin-bottom: 1rem;
 }
 .newsletter-form {
@@ -277,10 +279,12 @@ padding-bottom: 2rem;
   border: 1px solid #cbd5e0;
   border-radius: 0.5rem;
   flex: 1 1 250px;
+  background-color: white;
+  color: #797979;
 }
 .newsletter-form button {
   padding: 0.75rem 1.5rem;
-  background-color: #3182ce;
+  background-color: #8252a2;
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -288,22 +292,23 @@ padding-bottom: 2rem;
   transition: background 0.3s ease;
 }
 .newsletter-form button:hover {
-  background-color: #275a9a;
+  background-color: #72488e;
 }
 
 /* ===== Testimonial Section ===== */
 .testimonial-section {
   margin-top: 3rem;
   padding: 2.5rem 0.5rem;
-  background-color: #e2e8f0;
+  background-color: #ffffff;
   text-align: center;
   border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 .testimonial-item {
   max-width: 600px;
   margin: 0 auto 1.5rem;
   padding: 1.25rem;
-  background: #fff;
+  background: #f7f7f7;
   border-radius: 0.75rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
