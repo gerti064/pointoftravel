@@ -1,0 +1,299 @@
+/* ========== Color Palette Classes ========== */
+/* Use these utility classes to apply your preferred colors. */
+.color-1  { color: #794d98; }
+.color-2  { color: #6b4487; }
+.color-3  { color: #5e3b76; }
+.color-4  { color: #503365; }
+.color-5  { color: #432b55; }
+.color-6  { color: #362244; }
+.color-7  { color: #281a33; }
+.color-8  { color: #1b1122; }
+.color-9  { color: #0d0811; }
+.color-10 { color: #000000; }
+
+.bg-color-1  { background-color: #794d98; }
+.bg-color-2  { background-color: #6b4487; }
+.bg-color-3  { background-color: #5e3b76; }
+.bg-color-4  { background-color: #503365; }
+.bg-color-5  { background-color: #432b55; }
+.bg-color-6  { background-color: #362244; }
+.bg-color-7  { background-color: #281a33; }
+.bg-color-8  { background-color: #1b1122; }
+.bg-color-9  { background-color: #0d0811; }
+.bg-color-10 { background-color: #000000; }
+
+
+/* ===== Home Section ===== */
+.home-section {
+margin-top: 11rem;
+}
+
+/* ===== Full-Screen Slider ===== */
+.slider-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 85vh;
+  overflow: hidden;
+  z-index: -1;
+  margin-top: 5.1rem;
+}
+.slider-wrapper {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s ease-in-out;
+}
+.slide {
+  flex: 0 0 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  padding: 0.75rem;
+  cursor: pointer;
+  z-index: 3;
+  font-size: 1.25rem;
+  border-radius: 50%;
+}
+.slider-arrow.prev { left: 0.5rem; }
+.slider-arrow.next { right: 0.5rem; }
+.slider-dots {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 3;
+}
+.slider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  cursor: pointer;
+}
+.slider-dot.active { background: #3182ce; }
+
+/* ===== Overlay Content ===== */
+.home-container {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 0.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+.home-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+}
+@media (min-width: 640px) {
+  .home-title { font-size: 3.5rem; }
+}
+.home-subtitle {
+  font-size: 1rem;
+  color: #4a5568;
+  margin-bottom: 2rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ===== Call-to-Action Buttons ===== */
+.cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+@media (min-width: 640px) {
+  .cta-buttons { flex-direction: row; }
+}
+.cta-primary,
+.cta-secondary {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+.cta-primary {
+  background-color: #3182ce;
+  color: #ffffff;
+}
+.cta-primary:hover {
+  background-color: #275a9a;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+}
+.cta-secondary {
+  background-color: #ffffff;
+  color: #3182ce;
+  border: 1px solid #3182ce;
+}
+.cta-secondary:hover {
+  background-color: #eff4fb;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+/* ===== Content Wrapper Under Slider ===== */
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  margin-top: 100vh;
+  background: #f9fafb;
+  padding: 3rem 0.5rem 2rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== Featured Grid ===== */
+.featured-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 640px) {
+  .featured-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .featured-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.feature-card {
+  background-color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+.feature-card-image {
+  height: 12rem;
+  background-size: cover;
+  background-position: center;
+}
+.feature-card-content {
+  padding: 1.25rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.feature-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2d3748;
+}
+.feature-card-text {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+.feature-card-link {
+  font-size: 0.875rem;
+  color: #3182ce;
+  font-weight: 500;
+  text-decoration: none;
+  align-self: flex-start;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.feature-card-link::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 0.25rem;
+  transition: transform 0.3s ease;
+}
+.feature-card-link:hover::after {
+  transform: translateX(4px);
+}
+
+/* ===== Newsletter Section ===== */
+.newsletter-section {
+  margin-top: 3rem;
+  padding: 2.5rem 0.5rem;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+.newsletter-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+.newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.newsletter-form input[type="email"] {
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 0.5rem;
+  flex: 1 1 250px;
+}
+.newsletter-form button {
+  padding: 0.75rem 1.5rem;
+  background-color: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.newsletter-form button:hover {
+  background-color: #275a9a;
+}
+
+/* ===== Testimonial Section ===== */
+.testimonial-section {
+  margin-top: 3rem;
+  padding: 2.5rem 0.5rem;
+  background-color: #e2e8f0;
+  text-align: center;
+  border-radius: 1rem;
+}
+.testimonial-item {
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  padding: 1.25rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.testimonial-text {
+  font-style: italic;
+  color: #4a5568;
+  margin-bottom: 0.75rem;
+}
+.testimonial-author {
+  font-weight: 600;
+  color: #2d3748;
+}
