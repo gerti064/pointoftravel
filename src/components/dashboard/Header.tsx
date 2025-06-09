@@ -1,8 +1,8 @@
 // src/components/Header/Header.tsx
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './header.css';
-import LogoImg from '../../assets/logo.png'; // adjust if your path is different
+import LogoImg from '../../assets/logo.png'; // adjust path if needed
 
 type NavItem = {
   name: string;
@@ -20,10 +20,75 @@ const navItems: NavItem[] = [
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
   };
+
+  // On mount, check if admin is authenticated
+  useEffect(() => {
+    (async () => {
+      try {
+        const resp = await fetch('/api/admin/checkAuth.php', {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          setIsAdmin(data.isAuthenticated);
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (err) {
+        console.error('checkAuth error:', err);
+        setIsAdmin(false);
+      }
+    })();
+  }, []);
+
+  // Logout handler (frontend only):
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/logout.php', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } catch (err) {
+      console.error('Logout failed:', err);
+    } finally {
+      // After logout, mark as not admin and navigate to login
+      setIsAdmin(false);
+      navigate('/admin/login');
+    }
+  };
+
+  // While the auth check is in flight, render nothing (or a loader)
+  if (isAdmin === null) {
+    return (
+      <header className="header">
+        <div className="header-container">
+          <div className="header-content">
+            <div className="header-logo">
+              <NavLink to="/">
+                <img
+                  src={LogoImg}
+                  alt="Logo"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/vite.svg';
+                  }}
+                />
+              </NavLink>
+            </div>
+            <div>Loading…</div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="header">
@@ -53,6 +118,34 @@ const Header: React.FC = () => {
                 {item.name}
               </NavLink>
             ))}
+
+            {/* Spacer then Admin section */}
+            <div className="nav-desktop-admin-separator" />
+
+            {isAdmin ? (
+              <>
+                <NavLink
+                  to="/admin/dashboard"
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                >
+                  Dashboard
+                </NavLink>
+                <button
+                  onClick={handleLogout}
+                  className="admin-logout-button"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <NavLink
+                to="/admin/login"
+                className={({ isActive }) => (isActive ? 'active' : '')}
+              >
+                Admin Login
+              </NavLink>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -93,7 +186,7 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Nav Links */}
+      {/* Mobile Nav Links (collapsed by default) */}
       <nav className={`nav-mobile ${isOpen ? 'show-mobile' : ''}`}>
         {navItems.map((item) => (
           <NavLink
@@ -105,6 +198,38 @@ const Header: React.FC = () => {
             {item.name}
           </NavLink>
         ))}
+
+        <div className="nav-mobile-admin-separator" />
+
+        {isAdmin ? (
+          <>
+            <NavLink
+              to="/admin/dashboard"
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+            >
+              Dashboard
+            </NavLink>
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                handleLogout();
+              }}
+              className="admin-logout-button-mobile"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <NavLink
+            to="/admin/login"
+            onClick={() => setIsOpen(false)}
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
+            Admin Login
+          </NavLink>
+        )}
       </nav>
     </header>
   );
