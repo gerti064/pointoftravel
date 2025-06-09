@@ -1,0 +1,115 @@
+/* src/components/footer.css */
+.pt-footer {
+  background-color: var(--purple-4);
+  color: #fff;
+  padding: 3rem 1rem;
+}
+.pt-footer-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+@media (min-width: 640px) {
+  .pt-footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .pt-footer-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.pt-footer-section { }
+
+.pt-footer-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.pt-footer-text {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+.pt-footer-social {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  margin-left: 3rem;
+}
+.pt-footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+  color: #fff;
+  font-size: 0.9rem;
+  
+}
+.pt-footer-social-link:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.pt-footer-subtitle {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.pt-footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pt-footer-list li {
+  margin-bottom: 0.5rem;
+}
+.pt-footer-list a {
+  color: #fff;
+  opacity: 0.8;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+.pt-footer-list a:hover {
+  opacity: 1;
+}
+
+.pt-footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  margin-top: 2rem;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .pt-footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.pt-footer-bottom-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+.pt-footer-bottom-links a {
+  color: #fff;
+  opacity: 0.7;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+.pt-footer-bottom-links a:hover {
+  opacity: 1;
+}

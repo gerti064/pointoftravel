@@ -66,7 +66,8 @@ const Home: React.FC = () => {
 
       {/* Hero Overlay */}
       <div className="home-container">
-        <h1 className="home-title">Welcome to Point of Travel</h1>
+        <h1 className=" lato-bold " style={{fontSize:'30px',color:'white',marginTop:'100px '}}>Welcome to, </h1>
+        <h1 className="home-title lato-bold-italic" style={{fontSize:'5rem'}}> Point of Travel</h1>
         <p className="home-subtitle">
           Discover amazing destinations, plan your perfect getaway, and book your next adventure—all in one place.
         </p>
@@ -124,8 +125,8 @@ const Home: React.FC = () => {
           ))}
         </div>
       </div>
-     
     </div>
+    
   );
 };
 
