@@ -7,9 +7,7 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/f
 import Header from './components/dashboard/Header';
 import Home from './components/dashboard/Home';
 import About from './components/about/About';
-import Shop from './components/shop/Shop';
 import Travel from './components/travel/Travel';
-import Categories from './components/categories/Categories';
 import Contact from './components/contact/Contact';
 import Footer from './components/footer/Footer';
 
@@ -34,12 +32,8 @@ const App: React.FC = () => {
           {/* ─────────────── Public (non-admin) routes ─────────────── */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/categories" element={<Categories />} />
           <Route path="/travel" element={<Travel />} />
           <Route path="/contact" element={<Contact />} />
-          
-
           {/* ─────────────── Admin Auth routes ─────────────── */}
           {/* 1) Admin login (publicly accessible) */}
           <Route path="/admin/login" element={<AdminLogin />} />

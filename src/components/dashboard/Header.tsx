@@ -12,8 +12,6 @@ type NavItem = {
 const navItems: NavItem[] = [
   { name: 'Home', to: '/' },
   { name: 'About', to: '/about' },
-  { name: 'Shop', to: '/shop' },
-  { name: 'Categories', to: '/categories' },
   { name: 'Travel', to: '/travel' },
   { name: 'Contact', to: '/contact' },
 ];
