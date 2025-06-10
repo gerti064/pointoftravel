@@ -2,40 +2,42 @@
 import React from 'react';
 import foto1 from '../../assets/foto1.jpg';
 import './About.css'; // Import your new CSS file
-
 const About: React.FC = () => {
   return (
     <section className="about-section">
-      <div className="about-container">
-        <h1 className="about-title">
-          <img
-            src={foto1}
-            alt="foto1"
-            className="about-title-image"
-          />
-          
-          About Point of Travel
+         <h1 className="about-title">
+                           <img
+             
+              src={foto1}
+              alt="overlay"
+              className="root-overlay-image"
+            />
+          {/* Create a container for the image and text */}
+          <div className="about-title-image-container">
+ 
+            {/* The text you want to overlay */}
+            <span className="about-image-overlay-text" ><h2 className='lato-bold-italic'>
+              About Point of Travel
+              </h2>
+            </span>
+          </div>
         </h1>
 
         <p className="about-intro">
           Point of Travel was founded to help you explore the world effortlessly. Our mission is to curate memorable experiences, provide expert guidance, and make every journey uniquely yours.
         </p>
 
-        <div className="about-grid">
+         <div className="about-grid">
           <div className="about-subsection">
             <h2 className="about-subtitle">Our Mission</h2>
             <p className="about-text">
-              To connect travelers with authentic, life-changing adventures while supporting local communities and sustainable practices.
+Our mission as a travel agency is to be your trusted partner in crafting unforgettable journeys. We strive to simplify the complexities of travel planning, offering personalized advice and exclusive access to the best destinations, accommodations, and experiences worldwide. Our goal is to ensure every trip, whether for leisure or business, is seamless, enjoyable, and exceeds your expectations, ultimately enriching your life through the power of exploration and discovery.
             </p>
+        
           </div>
 
-          <div className="about-subsection">
-            <h2 className="about-subtitle">Our Vision</h2>
-            <p className="about-text">
-              To be the most trusted travel partner, guiding explorers toward unforgettable experiences around the globe.
-            </p>
-          </div>
-        </div>
+
+         </div>
 
         <div className="team-section">
           <h2 className="team-title">Meet the Team</h2>
@@ -57,7 +59,7 @@ const About: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+
     </section>
   );
 };

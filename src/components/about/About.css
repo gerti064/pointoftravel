@@ -1,22 +1,34 @@
 /* About Section Styles */
+/* Global Reset - Place at the very top of your CSS file */
+.lato-bold-italic   { font-family: "Lato", sans-serif; font-weight: 700; font-style: italic; }
+
 html, body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Good practice for consistent box model behavior */
+  width: 100%;
+  overflow-x: hidden; /* Prevents horizontal scrollbars */
+  box-sizing: border-box; /* Ensures padding/border are included in element's width */
+}
+
+/* Also good practice to apply box-sizing to all elements */
+* {
+  box-sizing: border-box;
 }
 .about-section {
-  
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  background-color: #794d98; /* bg-color-1 */
+  padding-top:10px;
+  padding-bottom: 8rem;
+   /* bg-color-1 */
   color: #ffffff;
 }
 
 .about-container {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+ 
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
   text-align: center;
+  
 }
 
 /* Heading */
@@ -27,15 +39,61 @@ html, body {
   line-height: 1.1;
   margin-bottom: 2rem;
 }
-
-.about-title img {
-  width: 100%;
-  max-width: 700px;
-  height: auto;
-  margin-bottom: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.about-title-image-container {
+  position: center; /* Essential for positioning children */
+  display: inline-block; /* Or block, depending on desired layout, but inline-block is often good for containing images */
+  max-width: 1425px; /* Match the max-width of your image for consistency */
+  width: 2000px; /* Ensure it takes full available width within its parent */
+  margin-top: 2em;
+  margin-bottom: 2rem; /* Move margin from image to container */
+  border-radius: 1rem; /* Apply border-radius to the container if you want the overlay text to respect it */
+  overflow: hidden; /* Important to clip content to the border-radius */
 }
+
+/* Image styles */
+
+
+/* Overlay text styles */
+.about-image-overlay-text {
+  position: absolute; /* Take text out of normal flow */
+  top: 50%; /* Position from the top */
+  left: 50%; /* Position from the left */
+  transform: translate(-50%, -50%); /* Center the text perfectly */
+  color: white; /* Or any contrasting color */
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem; /* Adjust size as needed */
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Optional: add shadow for readability */
+  padding: 0.5rem 1rem; /* Optional: add some padding around the text */
+  /* background-color: rgba(0, 0, 0, 0.5); Optional: add a semi-transparent background to the text for better contrast */
+  /* border-radius: 0.5rem; Optional: rounded corners for the background */
+  z-index: 2; /* Ensure text is above the image */
+  width: 100%; /* Allow text to span the width of the container for centering */
+}
+.root-overlay-image {
+  position:absolute; /* Positions relative to the viewport (stays in place when scrolling) */
+  padding-bottom: 8rem;
+  max-height: 550px;
+  margin-top: 1rem;/* OR position: absolute; if you want it to scroll with the page, relative to body */
+  top: 0;     /* Align to the top edge */
+  left: 0;    /* Align to the left edge */
+  width: 100%; /* Make it span the full width of the viewport */
+  height: 100%; /* Make it span the full height of the viewport */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  pointer-events: none; /* VERY IMPORTANT: Allows clicks/interactions to pass through to content underneath */
+  z-index: 1; /* Place it on top of almost everything else (adjust as needed) */
+   /* Optional: Make it semi-transparent if you want content to show through */
+}
+/* Adjustments for the main title that contains this structure */
+.about-title {
+  /* Remove any conflicting styles like font-size directly on .about-title
+     that might affect the overlay text, or set it to 'unset' */
+  font-size: unset; /* Or whatever makes sense for your h1 */
+  line-height: unset;
+  margin-bottom: 0; /* The margin is now on .about-title-image-container */
+}
+
 
 /* Intro paragraph */
 .about-intro {
@@ -49,6 +107,10 @@ html, body {
 
 /* Grid layout for mission and vision */
 .about-grid {
+    max-height: 1700px;
+    max-width: 1400px;
+    padding-top:195px;
+    padding-bottom:1rem;
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
@@ -56,30 +118,57 @@ html, body {
   color: #dcd1e9;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 500px) {
   .about-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 .about-subsection {
+  position: center;
+  max-height: 220px;
+  max-width: 1420px;
+  
+  padding-right: 1300px;
+  padding-bottom: 200px;
+  background-color: #6b4487;
   font-family: "Lato", sans-serif;
+    border-radius: 10px;
+
+}
+.about-whatweoffer {
+  position: center;
+  max-height: 110px;
+  padding-right: 1400px;
+  max-width: 1420px;
+  padding-bottom: 300px;
+  background-color: #6b4487;
+  font-family: "Lato", sans-serif;
+    border-radius: 10px;
+
 }
 
 .about-subtitle {
+  color:#ffffff;
   font-weight: 700; /* lato-bold */
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 35px;
+  margin-bottom: 2rem;
+  margin-left:14px;
+  width: 1400px;
+
 }
 
 .about-text {
   font-weight: 400; /* lato-regular */
-  color: #dcd1e9;
+  margin-left:14px;
+  font-size: 17px;
+  color: #ffffff;
+  width:1400px;
+
 }
 
 /* Team Section */
 .team-section {
-  margin-top: 3rem;
   text-align: center;
 }
 
@@ -88,7 +177,7 @@ html, body {
   font-weight: 700;
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
-  color: #ffffff;
+  color: #000000;
 }
 
 /* Team grid */
