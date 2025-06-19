@@ -1,3 +1,18 @@
+/* ── Lato font weights/styles ── */
+.lato-thin          { font-family: "Lato", sans-serif; font-weight: 100; font-style: normal; }
+.lato-light         { font-family: "Lato", sans-serif; font-weight: 300; font-style: normal; }
+.lato-regular       { font-family: "Lato", sans-serif; font-weight: 400; font-style: normal; }
+.lato-bold          { font-family: "Lato", sans-serif; font-weight: 700; font-style: normal; }
+.lato-black         { font-family: "Lato", sans-serif; font-weight: 900; font-style: normal; }
+
+.lato-thin-italic   { font-family: "Lato", sans-serif; font-weight: 100; font-style: italic; }
+.lato-light-italic  { font-family: "Lato", sans-serif; font-weight: 300; font-style: italic; }
+.lato-regular-italic{ font-family: "Lato", sans-serif; font-weight: 400; font-style: italic; }
+.lato-bold-italic   { font-family: "Lato", sans-serif; font-weight: 700; font-style: italic; }
+.lato-black-italic  { font-family: "Lato", sans-serif; font-weight: 900; font-style: italic; }
+
+
+
 /* ========== Color Palette Classes ========== */
 /* Use these utility classes to apply your preferred colors. */
 .color-1  { color: #794d98; }
@@ -25,7 +40,8 @@
 
 /* ===== Home Section ===== */
 .home-section {
-margin-top: 11rem;
+margin-top: 13rem;
+padding-bottom: 2rem;
 }
 
 /* ===== Full-Screen Slider ===== */
@@ -34,15 +50,16 @@ margin-top: 11rem;
   top: 0;
   left: 0;
   width: 100%;
-  height: 85vh;
+  height: 88.6vh;
   overflow: hidden;
   z-index: -1;
   margin-top: 5.1rem;
+  margin-bottom: 0px;
 }
 .slider-wrapper {
   display: flex;
   height: 100%;
-  transition: transform 0.6s ease-in-out;
+  transition: transform 0.55s ease-in-out;
 }
 .slide {
   flex: 0 0 100%;
@@ -85,28 +102,28 @@ margin-top: 11rem;
 
 /* ===== Overlay Content ===== */
 .home-container {
-  position: relative;
-  z-index: 1;
-  padding: 2rem 0.5rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  text-align: center;
+    margin-top: 1rem;
+    
+    
+  
 }
 .home-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0.75rem;
+  color: #ffffff;
+  margin-bottom: 0.25rem;  /* was 0.75rem — makes the second line sit closer */
+  line-height: 0.02;        /* tighter than the default, bringing lines nearer */
 }
+
 @media (min-width: 640px) {
   .home-title { font-size: 3.5rem; }
 }
 .home-subtitle {
   font-size: 1rem;
-  color: #4a5568;
-  margin-bottom: 2rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
   font-style: italic;
-  line-height: 1.4;
+  line-height: 7;
 }
 
 /* ===== Call-to-Action Buttons ===== */
@@ -114,9 +131,11 @@ margin-top: 11rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  line-height: 1.3;
   justify-content: center;
   align-items: center;
   margin-bottom: 3rem;
+  
 }
 @media (min-width: 640px) {
   .cta-buttons { flex-direction: row; }
@@ -133,21 +152,23 @@ margin-top: 11rem;
   z-index: 1;
 }
 .cta-primary {
-  background-color: #3182ce;
+  background-color: #8252a2;
   color: #ffffff;
 }
 .cta-primary:hover {
-  background-color: #275a9a;
+  background-color: #72488e;
+  color: white;
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
 }
 .cta-secondary {
   background-color: #ffffff;
-  color: #3182ce;
+  color: #8252a2;
   border: 1px solid #3182ce;
 }
 .cta-secondary:hover {
   background-color: #eff4fb;
+  color: #8252a2;
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(0,0,0,0.1);
 }
@@ -156,8 +177,8 @@ margin-top: 11rem;
 .content-wrapper {
   position: relative;
   z-index: 1;
-  margin-top: 100vh;
-  background: #f9fafb;
+  margin-top: 14rem;
+  background: #f6edfc;
   padding: 3rem 0.5rem 2rem;
   max-width: 1100px;
   margin-left: auto;
@@ -215,7 +236,7 @@ margin-top: 11rem;
 }
 .feature-card-link {
   font-size: 0.875rem;
-  color: #3182ce;
+  color: #8252a2;
   font-weight: 500;
   text-decoration: none;
   align-self: flex-start;
@@ -244,7 +265,7 @@ margin-top: 11rem;
 .newsletter-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #5e626a;
   margin-bottom: 1rem;
 }
 .newsletter-form {
@@ -258,10 +279,12 @@ margin-top: 11rem;
   border: 1px solid #cbd5e0;
   border-radius: 0.5rem;
   flex: 1 1 250px;
+  background-color: white;
+  color: #797979;
 }
 .newsletter-form button {
   padding: 0.75rem 1.5rem;
-  background-color: #3182ce;
+  background-color: #8252a2;
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -269,22 +292,23 @@ margin-top: 11rem;
   transition: background 0.3s ease;
 }
 .newsletter-form button:hover {
-  background-color: #275a9a;
+  background-color: #72488e;
 }
 
 /* ===== Testimonial Section ===== */
 .testimonial-section {
   margin-top: 3rem;
   padding: 2.5rem 0.5rem;
-  background-color: #e2e8f0;
+  background-color: #ffffff;
   text-align: center;
   border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 .testimonial-item {
   max-width: 600px;
   margin: 0 auto 1.5rem;
   padding: 1.25rem;
-  background: #fff;
+  background: #f7f7f7;
   border-radius: 0.75rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }

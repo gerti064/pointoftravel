@@ -1,0 +1,140 @@
+/* About Section Styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Good practice for consistent box model behavior */
+}
+.about-section {
+  
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background-color: #794d98; /* bg-color-1 */
+  color: #ffffff;
+}
+
+.about-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Heading */
+.about-title {
+  font-family: "Lato", sans-serif;
+  font-weight: 700; /* lato-bold */
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+}
+
+.about-title img {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Intro paragraph */
+.about-intro {
+  font-family: "Lato", sans-serif;
+  font-weight: 400; /* lato-regular */
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #e0d7f0; /* lighter purple */
+  margin-bottom: 2.5rem;
+}
+
+/* Grid layout for mission and vision */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  text-align: left;
+  color: #dcd1e9;
+}
+
+@media (min-width: 640px) {
+  .about-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.about-subsection {
+  font-family: "Lato", sans-serif;
+}
+
+.about-subtitle {
+  font-weight: 700; /* lato-bold */
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-text {
+  font-weight: 400; /* lato-regular */
+  color: #dcd1e9;
+}
+
+/* Team Section */
+.team-section {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.team-title {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+/* Team grid */
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  color: #dcd1e9;
+}
+
+@media (min-width: 640px) {
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Individual team card */
+.team-card {
+  background-color: #6b4487; /* slightly lighter purple */
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.team-name {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+  color: #fff;
+}
+
+.team-role {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  color: #c0a9d1;
+}
+
+.team-description {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: #dcd1e9;
+  flex-grow: 1;
+}

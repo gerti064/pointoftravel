@@ -1,15 +1,16 @@
 // src/App.tsx
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
 // Your existing dashboard header and pages:
 import Header from './components/dashboard/Header';
 import Home from './components/dashboard/Home';
 import About from './components/about/About';
-import Shop from './components/shop/Shop';
 import Travel from './components/travel/Travel';
-import Categories from './components/categories/Categories';
 import Contact from './components/contact/Contact';
+import Footer from './components/footer/Footer';
+
 
 // New imports for Admin authentication:
 import AdminLogin from './components/admin/AdminLogin';
@@ -18,6 +19,7 @@ import AdminDashboard from './components/admin/AdminDashboard'; // ← create th
 import AdminLogout from './components/admin/AdminLogout';
 
 import './App.css';
+
 
 const App: React.FC = () => {
   return (
@@ -30,11 +32,8 @@ const App: React.FC = () => {
           {/* ─────────────── Public (non-admin) routes ─────────────── */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/categories" element={<Categories />} />
           <Route path="/travel" element={<Travel />} />
           <Route path="/contact" element={<Contact />} />
-
           {/* ─────────────── Admin Auth routes ─────────────── */}
           {/* 1) Admin login (publicly accessible) */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -64,7 +63,9 @@ const App: React.FC = () => {
           <Route path="*" element={<NotFound />} />
           */}
         </Routes>
+        
       </main>
+      <Footer/>
     </BrowserRouter>
   );
 };
