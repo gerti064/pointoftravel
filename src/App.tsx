@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
 // Your existing dashboard header and pages:
-import Header from './components/dashboard/Header';
-import Home from './components/dashboard/Home';
+import Header from './components/header/Header';
+import Home from './components/home/Home';
 import About from './components/about/About';
 import Travel from './components/travel/Travel';
 import Contact from './components/contact/Contact';
