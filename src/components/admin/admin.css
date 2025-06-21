@@ -1,0 +1,102 @@
+/* src/components/admin/admin.css */
+
+/* Container for both login and dashboard pages */
+.admin-login-container,
+.admin-dashboard-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Lato', sans-serif;
+}
+
+/* Login form styling */
+.admin-login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.admin-login-form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.admin-error {
+  color: #c00;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.admin-login-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.admin-login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Dashboard categories edit form */
+.category-edit-form {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.category-edit-form label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.category-edit-form input,
+.category-edit-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.category-edit-form button {
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.category-edit-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Logout link on dashboard */
+.admin-logout-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #dc3545;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.admin-logout-link:hover {
+  text-decoration: underline;
+}

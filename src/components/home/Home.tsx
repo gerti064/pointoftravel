@@ -12,6 +12,7 @@ import p1 from '../../assets/p1.jpeg';
 import p2 from '../../assets/p2.jpg';
 import p3 from '../../assets/p3.jpg';
 
+// Slide images data
 const slides = [
   { id: 1, image: slide4 },
   { id: 2, image: slide5 },
@@ -19,16 +20,18 @@ const slides = [
   { id: 4, image: slide7 },
 ];
 
-const featuredItems = [
-  { title: 'Beach Escapes', text: 'Relax on sun-soaked beaches and crystal-clear waters.', image: p1 },
-  { title: 'Mountain Adventures', text: 'Find thrills and breathtaking views in the highlands.', image: p2 },
-  { title: 'City Tours', text: 'Immerse yourself in vibrant cultures and historic landmarks.', image: p3 },
+// Featured items data
+const featuredItems: { id: number; title: string; text: string; image: string }[] = [
+  { id: 1, title: 'Beach Escapes',       text: 'Relax on sun-soaked beaches and crystal-clear waters.', image: p1 },
+  { id: 2, title: 'Mountain Adventures', text: 'Find thrills and breathtaking views in the highlands.',     image: p2 },
+  { id: 3, title: 'City Tours',          text: 'Immerse yourself in vibrant cultures and historic landmarks.', image: p3 },
 ];
 
 const Home: React.FC = () => {
   const [current, setCurrent] = useState(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
+  // Auto-slide effect
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
@@ -40,7 +43,6 @@ const Home: React.FC = () => {
     clearTimeout(timeoutRef.current);
     setCurrent(index);
   };
-
   const prevSlide = () => goTo((current - 1 + slides.length) % slides.length);
   const nextSlide = () => goTo((current + 1) % slides.length);
 
@@ -81,12 +83,8 @@ const Home: React.FC = () => {
           Discover amazing destinations, plan your perfect getaway, and book your next adventure—all in one place.
         </p>
         <div className="cta-buttons">
-          <Link to="/shop" className="cta-primary">
-            Browse Packages
-          </Link>
-          <Link to="/contact" className="cta-secondary">
-            Contact Us
-          </Link>
+          <Link to="/shop" className="cta-primary">Browse Packages</Link>
+          <Link to="/contact" className="cta-secondary">Contact Us</Link>
         </div>
       </div>
 
@@ -94,8 +92,8 @@ const Home: React.FC = () => {
       <div className="content-wrapper">
         {/* Featured Cards */}
         <div className="featured-grid">
-          {featuredItems.map((f) => (
-            <div key={f.title} className="feature-card">
+          {featuredItems.map(f => (
+            <div key={f.id} className="feature-card">
               <div
                 className="feature-card-image"
                 style={{ backgroundImage: `url(${f.image})` }}
@@ -103,8 +101,8 @@ const Home: React.FC = () => {
               <div className="feature-card-content">
                 <h3 className="feature-card-title">{f.title}</h3>
                 <p className="feature-card-text">{f.text}</p>
-                <Link to="/categories" className="feature-card-link">
-                  Explore {f.title} &rarr;
+                <Link to={`/admin/dashboard?edit=${f.id}`} className="feature-card-link">
+                  Edit {f.title} &rarr;
                 </Link>
               </div>
             </div>
