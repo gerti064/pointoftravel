@@ -26,3 +26,6 @@
 ✅ File/image uploads
 
 ✅ Admin dashboard charts or tables
+
+
+install recharts

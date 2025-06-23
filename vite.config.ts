@@ -6,12 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      // Proxy all /api requests to your PHP server (XAMPP)
       '/api': {
-        target: 'http://localhost',  // Your PHP server address
+        target: 'http://localhost/pointoftravel',
         changeOrigin: true,
         secure: false,
-        // This is important - it tells Vite where your PHP files actually are
-        rewrite: (path) => path.replace(/^\/api/, '/pointoftravel/public/api')
+        // Keep the same path: /api/... → http://localhost/pointoftravel/api/...
+        // No rewrite needed since public/ is your docroot
       }
     }
   }

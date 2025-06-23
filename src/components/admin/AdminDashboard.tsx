@@ -33,21 +33,60 @@ const AdminDashboard: React.FC = () => {
   const [showBookings, setShowBookings] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
 
-  // ✅ Safe redirect if not authenticated
+  const [bookings, setBookings] = useState<any[]>([]);
+
   useEffect(() => {
     if (!isAdmin) {
       navigate('/admin/login');
     }
   }, [isAdmin, navigate]);
 
-  if (!isAdmin) return <p>Checking access...</p>; // or a loading spinner
-
-  const handleTextChange = (id: number, value: string) => {
-    setEditedText(prev => ({ ...prev, [id]: value }));
+  const toggleBookings = () => {
+    setShowBookings(prev => {
+      const next = !prev;
+      if (next) {
+        fetch('/api/bookings/get_bookings.php')
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              setBookings(data.bookings);
+            } else {
+              alert('Failed to load bookings.');
+            }
+          })
+          .catch(err => {
+            console.error('Error loading bookings:', err);
+            alert('Error loading bookings.');
+          });
+      }
+      return next;
+    });
   };
 
-  const handleImageChange = (id: number, value: string) => {
-    setEditedImage(prev => ({ ...prev, [id]: value }));
+  if (!isAdmin) return <p>Checking access...</p>;
+
+  const handleTextChange = (id: number, value: string) => setEditedText(prev => ({ ...prev, [id]: value }));
+  const handleImageChange = (id: number, value: string) => setEditedImage(prev => ({ ...prev, [id]: value }));
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const resp = await fetch('/api/admin/uploadImage.php', { method: 'POST', body: formData });
+      const data = await resp.json();
+      if (data.success) {
+        setEditedImage(prev => ({ ...prev, [id]: data.url }));
+      } else {
+        alert('Upload failed: ' + data.message);
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Error uploading image');
+    }
   };
 
   const handleSave = (id: number) => {
@@ -55,24 +94,12 @@ const AdminDashboard: React.FC = () => {
     setCategories(prev =>
       prev.map(cat =>
         cat.id === id
-          ? {
-              ...cat,
-              text: editedText[id] ?? cat.text,
-              image: editedImage[id] ?? cat.image,
-            }
+          ? { ...cat, text: editedText[id] ?? cat.text, image: editedImage[id] ?? cat.image }
           : cat
       )
     );
-    setEditedText(prev => {
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    });
-    setEditedImage(prev => {
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    });
+    setEditedText(prev => { const c = { ...prev }; delete c[id]; return c; });
+    setEditedImage(prev => { const c = { ...prev }; delete c[id]; return c; });
     setTimeout(() => setLoadingId(null), 500);
   };
 
@@ -103,13 +130,16 @@ const AdminDashboard: React.FC = () => {
                 onChange={e => handleTextChange(cat.id, e.target.value)}
               />
 
-              <label htmlFor={`image-${cat.id}`}>Image:</label>
+              <label htmlFor={`image-${cat.id}`}>Image URL:</label>
               <input
                 type="text"
                 id={`image-${cat.id}`}
                 value={editedImage[cat.id] ?? cat.image}
                 onChange={e => handleImageChange(cat.id, e.target.value)}
               />
+
+              <label>Upload Image:</label>
+              <input type="file" accept="image/*" onChange={e => handleFileUpload(e, cat.id)} />
 
               <div className="image-preview">
                 <p>Preview:</p>
@@ -128,13 +158,24 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      <button onClick={() => setShowBookings(prev => !prev)}>
+      <button onClick={toggleBookings}>
         {showBookings ? '▲ Hide Bookings' : '▼ Show Bookings'}
       </button>
       {showBookings && (
         <div className="dropdown-section">
           <h2>Bookings</h2>
-          <p>(We'll fill this in later)</p>
+          {bookings.length === 0 ? (
+            <p>No bookings found.</p>
+          ) : (
+            <ul>
+              {bookings.map((b, i) => (
+                <li key={i}>
+                  <strong>{b.departure_location}</strong> — {b.trip_type}, {b.departure_date}
+                  {b.return_date && ` to ${b.return_date}`} | Adults: {b.number_of_adults}, Kids: {b.number_of_kids}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 

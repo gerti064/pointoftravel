@@ -1,15 +1,12 @@
-/* src/components/admin/admin.css */
-
 /* Container for both login and dashboard pages */
 .admin-login-container,
 .admin-dashboard-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  margin-top: 5rem;
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2rem;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-family: 'Lato', sans-serif;
 }
 
@@ -17,15 +14,15 @@
 .admin-login-form label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .admin-login-form input {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.6rem;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 1rem;
 }
 
@@ -37,13 +34,18 @@
 
 .admin-login-button {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.8rem;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: 5px;
+  font-size: 1.05rem;
   cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.admin-login-button:hover {
+  background-color: #0069d9;
 }
 
 .admin-login-button:disabled {
@@ -51,11 +53,11 @@
   cursor: not-allowed;
 }
 
-/* --- Dropdown toggle buttons --- */
+/* Dashboard buttons */
 .admin-dashboard-container button {
   width: 100%;
   margin: 1rem 0;
-  padding: 0.75rem;
+  padding: 0.85rem 1rem;
   background-color: #343a40;
   color: #fff;
   border: none;
@@ -64,53 +66,64 @@
   font-weight: bold;
   cursor: pointer;
   text-align: left;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .admin-dashboard-container button:hover {
   background-color: #495057;
 }
 
-/* Dropdown content section */
+/* Dropdown sections */
 .dropdown-section {
-  margin: 0.5rem 0 2rem;
-  padding: 1rem;
+  margin: 1rem 0 2rem;
+  padding: 1.25rem;
   background-color: #f8f9fa;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
-/* Dashboard categories edit form */
+/* Category form layout */
 .category-edit-form {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .category-edit-form label {
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
   font-weight: 600;
 }
 
 .category-edit-form input,
 .category-edit-form textarea {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.6rem;
   margin-bottom: 0.75rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 0.95rem;
+  resize: vertical;
 }
 
 .category-edit-form button {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   background-color: #28a745;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.category-edit-form button:hover {
+  background-color: #218838;
 }
 
 .category-edit-form button:disabled {
@@ -120,16 +133,27 @@
 
 /* Image preview */
 .image-preview {
-  margin-bottom: 0.75rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-/* Logout link on dashboard */
+.image-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+}
+
+/* Logout link */
 .admin-logout-link {
   display: inline-block;
-  margin-top: 1rem;
+  margin-top: 2rem;
   color: #dc3545;
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .admin-logout-link:hover {
