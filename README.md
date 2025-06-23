@@ -16,3 +16,13 @@
 
 #6A1B9A
 >>>>>>> master
+
+
+
+✅ Logout functionality
+
+✅ Route protection
+
+✅ File/image uploads
+
+✅ Admin dashboard charts or tables

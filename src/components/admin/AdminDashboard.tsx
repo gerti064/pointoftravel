@@ -1,5 +1,5 @@
-// src/components/admin/AdminDashboard.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import './admin.css';
 
@@ -21,19 +21,26 @@ const initialItems: Category[] = [
 ];
 
 const AdminDashboard: React.FC = () => {
-  const { isAdmin } = useAdminAuth();
+  const { isAdmin, logout } = useAdminAuth();
+  const navigate = useNavigate();
 
   const [categories, setCategories] = useState<Category[]>(initialItems);
   const [editedText, setEditedText] = useState<Record<number, string>>({});
   const [editedImage, setEditedImage] = useState<Record<number, string>>({});
   const [loadingId, setLoadingId] = useState<number | null>(null);
 
-  // Dropdown states
   const [showFeatured, setShowFeatured] = useState(false);
   const [showBookings, setShowBookings] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
 
-  if (!isAdmin) return null;
+  // ✅ Safe redirect if not authenticated
+  useEffect(() => {
+    if (!isAdmin) {
+      navigate('/admin/login');
+    }
+  }, [isAdmin, navigate]);
+
+  if (!isAdmin) return <p>Checking access...</p>; // or a loading spinner
 
   const handleTextChange = (id: number, value: string) => {
     setEditedText(prev => ({ ...prev, [id]: value }));
@@ -69,11 +76,15 @@ const AdminDashboard: React.FC = () => {
     setTimeout(() => setLoadingId(null), 500);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/admin/login');
+  };
+
   return (
     <div className="admin-dashboard-container">
       <h1>Admin Dashboard</h1>
 
-      {/* Featured Items Dropdown */}
       <button onClick={() => setShowFeatured(prev => !prev)}>
         {showFeatured ? '▲ Hide Featured Items' : '▼ Show Featured Items'}
       </button>
@@ -117,7 +128,6 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Bookings Button (empty for now) */}
       <button onClick={() => setShowBookings(prev => !prev)}>
         {showBookings ? '▲ Hide Bookings' : '▼ Show Bookings'}
       </button>
@@ -128,7 +138,6 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Messages Button (empty for now) */}
       <button onClick={() => setShowMessages(prev => !prev)}>
         {showMessages ? '▲ Hide Messages' : '▼ Show Messages'}
       </button>
@@ -138,6 +147,10 @@ const AdminDashboard: React.FC = () => {
           <p>(We'll fill this in later)</p>
         </div>
       )}
+
+      <button onClick={handleLogout} className="admin-logout-link">
+        Logout
+      </button>
     </div>
   );
 };
