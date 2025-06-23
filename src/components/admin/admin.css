@@ -6,6 +6,7 @@
   max-width: 600px;
   margin: 2rem auto;
   padding: 1.5rem;
+  margin-top: 5rem;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -50,6 +51,35 @@
   cursor: not-allowed;
 }
 
+/* --- Dropdown toggle buttons --- */
+.admin-dashboard-container button {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background-color: #343a40;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.3s;
+}
+
+.admin-dashboard-container button:hover {
+  background-color: #495057;
+}
+
+/* Dropdown content section */
+.dropdown-section {
+  margin: 0.5rem 0 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
 /* Dashboard categories edit form */
 .category-edit-form {
   margin-bottom: 1.5rem;
@@ -86,6 +116,11 @@
 .category-edit-form button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Image preview */
+.image-preview {
+  margin-bottom: 0.75rem;
 }
 
 /* Logout link on dashboard */
