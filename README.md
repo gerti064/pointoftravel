@@ -37,3 +37,39 @@ Pages (e.g. Home.tsx)	✅ Yes	Layout & content
 Header/Footer	✅ Yes	Usually fixed, needs mobile fallback
 Buttons/Forms	✅ Maybe	If they have fixed sizes
 Low-impact Utility Files	❌ No	Files like context, utils, or backend PHP don’t need it
+
+
+
+
+
+
+
+
+✅ Step 3: Show Contact Form Submissions in Messages
+📤 Send:
+
+backend/api/contact.php
+
+Any file where you're storing messages (e.g., contact_log.txt or a DB insert file)
+
+src/components/admin/AdminDashboard.tsx (for display area)
+
+
+
+
+
+✅ Step 4: Logout Admin on Refresh
+📤 Send:
+
+src/context/AdminAuthContext.tsx
+
+src/components/Header.tsx or wherever auth check is triggered on page load
+
+
+
+✅ Step 5: Redirect Admin to Dashboard on Login
+📤 Send:
+
+backend/api/admin/login.php
+
+src/pages/AdminLogin.tsx or AdminLoginForm.tsx

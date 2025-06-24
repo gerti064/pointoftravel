@@ -44,34 +44,26 @@ const Travel: React.FC = () => {
           : [],
     };
 
-    fetch("/bookings/add_booking.php", {
+fetch("/api/bookings/add_booking.php", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(payload),
 })
+  .then((res) => res.json())
+  .then((data) => {
+    console.log("Server response:", data); // 👈 add this
+    if (data.success) {
+      alert("Booking submitted successfully!");
+      // clear form...
+    } else {
+      alert("Failed to submit booking: " + data.message);
+    }
+  })
+  .catch((err) => {
+    console.error("Fetch error:", err);
+    alert("Error submitting booking.");
+  });
 
-
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          alert("Booking submitted successfully!");
-          setDepartureLocation("");
-          setDepartureDate("");
-          setReturnDate("");
-          setNumberOfAdults(1);
-          setNumberOfKids(0);
-          setKidsAges("");
-          setTravelMode("bus");
-          setHotel("");
-          setTripType("one-way");
-        } else {
-          alert("Failed to submit booking: " + data.message);
-        }
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        alert("Error submitting booking.");
-      });
   };
 
   return (

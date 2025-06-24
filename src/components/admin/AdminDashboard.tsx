@@ -3,10 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import './admin.css';
 
-import p1 from '../../assets/p1.jpeg';
-import p2 from '../../assets/p2.jpg';
-import p3 from '../../assets/p3.jpg';
-
 interface Category {
   id: number;
   title: string;
@@ -14,17 +10,11 @@ interface Category {
   image: string;
 }
 
-const initialItems: Category[] = [
-  { id: 1, title: 'Beach Escapes', text: 'Relax on sun-soaked beaches and crystal-clear waters.', image: p1 },
-  { id: 2, title: 'Mountain Adventures', text: 'Find thrills and breathtaking views in the highlands.', image: p2 },
-  { id: 3, title: 'City Tours', text: 'Immerse yourself in vibrant cultures and historic landmarks.', image: p3 },
-];
-
 const AdminDashboard: React.FC = () => {
   const { isAdmin, logout } = useAdminAuth();
   const navigate = useNavigate();
 
-  const [categories, setCategories] = useState<Category[]>(initialItems);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [editedText, setEditedText] = useState<Record<number, string>>({});
   const [editedImage, setEditedImage] = useState<Record<number, string>>({});
   const [savingAll, setSavingAll] = useState(false);
@@ -34,19 +24,20 @@ const AdminDashboard: React.FC = () => {
   const [showMessages, setShowMessages] = useState(false);
 
   const [bookings, setBookings] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
 
   useEffect(() => {
     if (!isAdmin) {
       navigate('/admin/login');
     } else {
-    fetch('/api/admin/get_featured.php')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setCategories(data.items);
-        }
-      });
-  }
+      fetch('/api/admin/get_featured.php')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setCategories(data.items);
+          }
+        });
+    }
   }, [isAdmin, navigate]);
 
   const toggleBookings = () => {
@@ -65,6 +56,26 @@ const AdminDashboard: React.FC = () => {
           .catch(err => {
             console.error('Error loading bookings:', err);
             alert('Error loading bookings.');
+          });
+      }
+      return next;
+    });
+  };
+
+  const toggleMessages = () => {
+    setShowMessages(prev => {
+      const next = !prev;
+      if (next) {
+        fetch('/api/contact/get_messages.php')
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              setMessages(data.messages);
+            }
+          })
+          .catch(err => {
+            console.error('Error loading messages:', err);
+            alert('Error loading messages.');
           });
       }
       return next;
@@ -98,32 +109,32 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleSaveAll = async () => {
-  setSavingAll(true);
-  const updated = categories.map(cat => ({
-    ...cat,
-    text: editedText[cat.id] ?? cat.text,
-    image: editedImage[cat.id] ?? cat.image,
-  }));
+    setSavingAll(true);
+    const updated = categories.map(cat => ({
+      ...cat,
+      text: editedText[cat.id] ?? cat.text,
+      image: editedImage[cat.id] ?? cat.image,
+    }));
 
-  setCategories(updated);
-  setEditedText({});
-  setEditedImage({});
+    setCategories(updated);
+    setEditedText({});
+    setEditedImage({});
 
-  try {
-    const resp = await fetch('/api/admin/update_featured.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: updated }),
-    });
-    const data = await resp.json();
-    if (!data.success) alert('Failed to save changes.');
-  } catch (err) {
-    console.error('Save error:', err);
-    alert('Error saving data.');
-  }
+    try {
+      const resp = await fetch('/api/admin/update_featured.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: updated }),
+      });
+      const data = await resp.json();
+      if (!data.success) alert('Failed to save changes.');
+    } catch (err) {
+      console.error('Save error:', err);
+      alert('Error saving data.');
+    }
 
-  setSavingAll(false);
-};
+    setSavingAll(false);
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -144,18 +155,16 @@ const AdminDashboard: React.FC = () => {
             <div key={cat.id} className="category-edit-form">
               <h3>{cat.title} (ID: {cat.id})</h3>
 
-              <label htmlFor={`text-${cat.id}`}>Text:</label>
+              <label>Text:</label>
               <textarea
-                id={`text-${cat.id}`}
                 rows={3}
                 value={editedText[cat.id] ?? cat.text}
                 onChange={e => handleTextChange(cat.id, e.target.value)}
               />
 
-              <label htmlFor={`image-${cat.id}`}>Image URL:</label>
+              <label>Image URL:</label>
               <input
                 type="text"
-                id={`image-${cat.id}`}
                 value={editedImage[cat.id] ?? cat.image}
                 onChange={e => handleImageChange(cat.id, e.target.value)}
               />
@@ -166,7 +175,12 @@ const AdminDashboard: React.FC = () => {
               <div className="image-preview">
                 <p>Preview:</p>
                 <img
-                  src={editedImage[cat.id] ?? cat.image}
+                  src={
+                    (editedImage[cat.id] ?? cat.image).startsWith('http') ||
+                    (editedImage[cat.id] ?? cat.image).startsWith('/uploads/')
+                      ? editedImage[cat.id] ?? cat.image
+                      : `/uploads/${editedImage[cat.id] ?? cat.image}`
+                  }
                   alt={`Preview ${cat.id}`}
                   style={{ maxWidth: '200px', maxHeight: '100px' }}
                 />
@@ -190,9 +204,19 @@ const AdminDashboard: React.FC = () => {
           ) : (
             <ul>
               {bookings.map((b, i) => (
-                <li key={i}>
+                <li key={i} style={{ marginBottom: '1rem' }}>
                   <strong>{b.departure_location}</strong> — {b.trip_type}, {b.departure_date}
-                  {b.return_date && ` to ${b.return_date}`} | Adults: {b.number_of_adults}, Kids: {b.number_of_kids}
+                  {b.return_date && ` to ${b.return_date}`}<br />
+                  <strong>Adults:</strong> {b.number_of_adults}, <strong>Kids:</strong> {b.number_of_kids}<br />
+                  <strong>Travel mode:</strong> {b.travel_mode}, <strong>Hotel:</strong> {b.hotel || 'N/A'}<br />
+                  {b.kids_ages && (
+                    <>
+                      <strong>Kids' Ages:</strong>{" "}
+                      {Array.isArray(b.kids_ages)
+                        ? b.kids_ages.join(", ")
+                        : JSON.parse(b.kids_ages).join(", ")}
+                    </>
+                  )}
                 </li>
               ))}
             </ul>
@@ -200,13 +224,25 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      <button onClick={() => setShowMessages(prev => !prev)}>
+      <button onClick={toggleMessages}>
         {showMessages ? '▲ Hide Messages' : '▼ Show Messages'}
       </button>
       {showMessages && (
         <div className="dropdown-section">
           <h2>Messages</h2>
-          <p>(We'll fill this in later)</p>
+          {messages.length === 0 ? (
+            <p>No messages yet.</p>
+          ) : (
+            <ul>
+              {messages.map((msg, i) => (
+                <li key={i}>
+                  <strong>From:</strong> {msg.name} ({msg.email})<br />
+                  <strong>Message:</strong> {msg.message}<br />
+                  <strong>Date:</strong> {msg.created_at}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
