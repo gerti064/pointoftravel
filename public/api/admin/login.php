@@ -1,66 +1,69 @@
 <?php
-// Add these lines at the top for debugging
-error_reporting(E_ALL);
+// File: public/api/admin/login.php
+
+// --- Debug mode (turn off in production) ---
 ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ob_start(); // buffer output to prevent HTML leaks
 
-// Log incoming requests to a file for debugging
-file_put_contents('login_debug.log', date('Y-m-d H:i:s') . ' - Request: ' . file_get_contents('php://input') . PHP_EOL, FILE_APPEND);
-
-header('Content-Type: application/json');
+// --- Start session ---
 session_start();
 
-// 1) Read JSON payload from React
-$input = json_decode(file_get_contents('php://input'), true);
+// --- CORS headers (required for cookies/session to work from frontend) ---
+header("Access-Control-Allow-Origin: http://localhost:5174"); // ✅ <-- match React dev port
+header("Access-Control-Allow-Credentials: true");
+header("Content-Type: application/json");
 
-if (!isset($input['username'], $input['password'])) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Missing username or password']);
+// --- Read and decode JSON body ---
+$input = json_decode(file_get_contents("php://input"), true);
+$username = $input['username'] ?? '';
+$password = $input['password'] ?? '';
+
+// --- Validate input ---
+if (empty($username) || empty($password)) {
+    echo json_encode(['success' => false, 'message' => 'Missing credentials']);
     exit;
 }
 
-$username = $input['username'];
-$password = $input['password'];
+try {
+    // --- Connect to MySQL ---
+    $mysqli = new mysqli("localhost", "root", "", "pointoftravel");
 
-// 2) Connect to MySQL with correct credentials
-$dbHost = 'localhost';
-$dbUser = 'root';
-$dbPass = '';            // adjust if you have a root‐password
-$dbName = 'pointoftravel';
-
-$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
-if ($conn->connect_errno) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Database connection failed: ' . $conn->connect_error]);
-    exit;
-}
-
-// 3) Prepare+execute query to find that username
-$stmt = $conn->prepare("SELECT id, password_hash FROM admins WHERE username = ?");
-if (!$stmt) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Prepare failed: ' . $conn->error]);
-    exit;
-}
-$stmt->bind_param('s', $username);
-$stmt->execute();
-$stmt->bind_result($adminId, $storedHash);
-
-if ($stmt->fetch()) {
-    // 4) We found a row: verify the password
-    if (password_verify($password, $storedHash)) {
-        // 5) Password is correct: set session and return success
-        $_SESSION['admin_id'] = $adminId;
-        echo json_encode(['success' => true, 'message' => 'Logged in successfully']);
-    } else {
-        // Wrong password
-        http_response_code(401);
-        echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
+    if ($mysqli->connect_error) {
+        throw new Exception("Connection failed: " . $mysqli->connect_error);
     }
-} else {
-    // No such username
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
-}
 
-$stmt->close();
-$conn->close();
+    // --- Fetch user by username ---
+    $stmt = $mysqli->prepare("SELECT id, password FROM admins WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        file_put_contents("debug_log.txt", "Input password: $password\nStored hash: " . $row['password'] . "\n", FILE_APPEND);
+
+        // --- Verify password hash ---
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['admin_id'] = $row['id'];
+
+            ob_clean(); // optional: clear buffer
+            echo json_encode(['success' => true, 'message' => 'Login successful']);
+            exit;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid password']);
+            exit;
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'User not found']);
+        exit;
+    }
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Server error',
+        'error' => $e->getMessage(), // Remove this in production
+    ]);
+    exit;
+}

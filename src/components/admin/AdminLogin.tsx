@@ -41,7 +41,7 @@ export default function AdminLogin() {
       const data: LoginResponse = await resp.json();
       if (data.success) {
         // Redirect to your admin dashboard or wherever you want:
-        navigate('/admin/dashboard');
+        navigate('/');
       } else {
         setErrorMessage(data.message || 'Invalid credentials');
       }

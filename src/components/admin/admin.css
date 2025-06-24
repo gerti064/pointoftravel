@@ -1,0 +1,161 @@
+/* Container for both login and dashboard pages */
+.admin-login-container,
+.admin-dashboard-container {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Lato', sans-serif;
+}
+
+/* Login form styling */
+.admin-login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.admin-login-form input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.admin-error {
+  color: #c00;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.admin-login-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.admin-login-button:hover {
+  background-color: #0069d9;
+}
+
+.admin-login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Dashboard buttons */
+.admin-dashboard-container button {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  background-color: #343a40;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.admin-dashboard-container button:hover {
+  background-color: #495057;
+}
+
+/* Dropdown sections */
+.dropdown-section {
+  margin: 1rem 0 2rem;
+  padding: 1.25rem;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Category form layout */
+.category-edit-form {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-edit-form label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.category-edit-form input,
+.category-edit-form textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.category-edit-form button {
+  padding: 0.6rem 1.2rem;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.category-edit-form button:hover {
+  background-color: #218838;
+}
+
+.category-edit-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Image preview */
+.image-preview {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.image-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+}
+
+/* Logout link */
+.admin-logout-link {
+  display: inline-block;
+  margin-top: 2rem;
+  color: #dc3545;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.admin-logout-link:hover {
+  text-decoration: underline;
+}

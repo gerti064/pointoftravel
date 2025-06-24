@@ -1,4 +1,3 @@
-// src/components/travel/Travel.tsx
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import "./Travel.css";
 
@@ -6,21 +5,15 @@ type TripType = "one-way" | "two-way";
 type TravelMode = "bus" | "plane";
 
 const Travel: React.FC = () => {
-  // --- component state ---
   const [tripType, setTripType] = useState<TripType>("one-way");
   const [departureLocation, setDepartureLocation] = useState<string>("");
   const [departureDate, setDepartureDate] = useState<string>("");
-  const [returnDate, setReturnDate] = useState<string>(""); // only for two-way
-
+  const [returnDate, setReturnDate] = useState<string>("");
   const [numberOfAdults, setNumberOfAdults] = useState<number>(1);
   const [numberOfKids, setNumberOfKids] = useState<number>(0);
-
   const [travelMode, setTravelMode] = useState<TravelMode>("bus");
-  const [hotel, setHotel] = useState<string>(""); // optional
-
-  // Only if numberOfKids > 0:
-  const [kidsAges, setKidsAges] = useState<string>(""); // e.g. "5, 8"
-  // -----------------------
+  const [hotel, setHotel] = useState<string>("");
+  const [kidsAges, setKidsAges] = useState<string>("");
 
   const handleTripTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value as TripType;
@@ -51,8 +44,34 @@ const Travel: React.FC = () => {
           : [],
     };
 
-    console.log("Form submitted:", payload);
-    // e.g. navigate("/travel/results", { state: payload });
+    fetch("/bookings/add_booking.php", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload),
+})
+
+
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          alert("Booking submitted successfully!");
+          setDepartureLocation("");
+          setDepartureDate("");
+          setReturnDate("");
+          setNumberOfAdults(1);
+          setNumberOfKids(0);
+          setKidsAges("");
+          setTravelMode("bus");
+          setHotel("");
+          setTripType("one-way");
+        } else {
+          alert("Failed to submit booking: " + data.message);
+        }
+      })
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        alert("Error submitting booking.");
+      });
   };
 
   return (
@@ -60,7 +79,6 @@ const Travel: React.FC = () => {
       <form onSubmit={handleSubmit} className="travel-form">
         <h2>Book Your Trip</h2>
 
-        {/* ==== Trip type selection ==== */}
         <div className="options-row">
           <label className="option">
             <input
@@ -84,7 +102,6 @@ const Travel: React.FC = () => {
           </label>
         </div>
 
-        {/* ==== Departure Location ==== */}
         <div className="form-group">
           <label htmlFor="departureLocation">Departure Location</label>
           <input
@@ -98,7 +115,6 @@ const Travel: React.FC = () => {
           />
         </div>
 
-        {/* ==== Departure Date ==== */}
         <div className="form-group">
           <label htmlFor="departureDate">Departure Date</label>
           <input
@@ -111,7 +127,6 @@ const Travel: React.FC = () => {
           />
         </div>
 
-        {/* ==== Return Date (only if two-way) ==== */}
         {tripType === "two-way" && (
           <div className="form-group">
             <label htmlFor="returnDate">Return Date</label>
@@ -126,7 +141,6 @@ const Travel: React.FC = () => {
           </div>
         )}
 
-        {/* ==== Number of Adults & Kids ==== */}
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="numberOfAdults">Number of Adults</label>
@@ -160,7 +174,6 @@ const Travel: React.FC = () => {
           </div>
         </div>
 
-        {/* ==== Kids' Ages (only if numberOfKids > 0) ==== */}
         {numberOfKids > 0 && (
           <div className="form-group">
             <label htmlFor="kidsAges">Kids' Ages (comma-separated)</label>
@@ -176,23 +189,19 @@ const Travel: React.FC = () => {
           </div>
         )}
 
-        {/* ==== Travel Mode (Bus or Plane) ==== */}
         <div className="form-group">
           <label htmlFor="travelMode">Travel Mode</label>
           <select
             id="travelMode"
             className="full-width"
             value={travelMode}
-            onChange={(e) =>
-              setTravelMode(e.target.value as TravelMode)
-            }
+            onChange={(e) => setTravelMode(e.target.value as TravelMode)}
           >
             <option value="bus">Bus</option>
             <option value="plane">Plane</option>
           </select>
         </div>
 
-        {/* ==== Hotel (optional) ==== */}
         <div className="form-group">
           <label htmlFor="hotel">Hotel (optional)</label>
           <input
@@ -205,7 +214,6 @@ const Travel: React.FC = () => {
           />
         </div>
 
-        {/* ==== Submit Button ==== */}
         <button type="submit" className="submit-btn">
           Search Trips
         </button>
