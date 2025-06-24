@@ -29,3 +29,11 @@
 
 
 install recharts
+
+
+File Type	Needs Editing?	Why
+Global Layouts	✅ Yes	Affects all views
+Pages (e.g. Home.tsx)	✅ Yes	Layout & content
+Header/Footer	✅ Yes	Usually fixed, needs mobile fallback
+Buttons/Forms	✅ Maybe	If they have fixed sizes
+Low-impact Utility Files	❌ No	Files like context, utils, or backend PHP don’t need it
