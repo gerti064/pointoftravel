@@ -8,10 +8,6 @@ import slide5 from '../../assets/slide5.jpg';
 import slide6 from '../../assets/slide6.webp';
 import slide7 from '../../assets/slide7.jpg';
 
-import p1 from '../../assets/p1.jpeg';
-import p2 from '../../assets/p2.jpg';
-import p3 from '../../assets/p3.jpg';
-
 // Slide images data
 const slides = [
   { id: 1, image: slide4 },
@@ -20,16 +16,10 @@ const slides = [
   { id: 4, image: slide7 },
 ];
 
-// Featured items data
-const featuredItems: { id: number; title: string; text: string; image: string }[] = [
-  { id: 1, title: 'Beach Escapes',       text: 'Relax on sun-soaked beaches and crystal-clear waters.', image: p1 },
-  { id: 2, title: 'Mountain Adventures', text: 'Find thrills and breathtaking views in the highlands.',     image: p2 },
-  { id: 3, title: 'City Tours',          text: 'Immerse yourself in vibrant cultures and historic landmarks.', image: p3 },
-];
-
 const Home: React.FC = () => {
   const [current, setCurrent] = useState(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const [featuredItems, setFeaturedItems] = useState<{ id: number; title: string; text: string; image: string }[]>([]);
 
   // Auto-slide effect
   useEffect(() => {
@@ -38,6 +28,20 @@ const Home: React.FC = () => {
     }, 5000);
     return () => clearTimeout(timeoutRef.current);
   }, [current]);
+
+  // Fetch featured items from backend
+  useEffect(() => {
+    fetch('/api/admin/get_featured.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setFeaturedItems(data.items);
+        } else {
+          console.error('Failed to load featured items');
+        }
+      })
+      .catch(err => console.error('Error fetching featured items:', err));
+  }, []);
 
   const goTo = (index: number) => {
     clearTimeout(timeoutRef.current);
@@ -120,7 +124,7 @@ const Home: React.FC = () => {
 
         {/* Testimonials Section */}
         <div className="testimonial-section">
-          {[
+          {[ 
             { text: "Point of Travel made planning our family vacation effortless. Highly recommend!", author: '– Sarah L.' },
             { text: "Amazing deals and fantastic customer service. We'll be back!", author: '– Mark T.' },
           ].map((t, i) => (

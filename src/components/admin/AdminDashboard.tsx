@@ -27,7 +27,7 @@ const AdminDashboard: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>(initialItems);
   const [editedText, setEditedText] = useState<Record<number, string>>({});
   const [editedImage, setEditedImage] = useState<Record<number, string>>({});
-  const [loadingId, setLoadingId] = useState<number | null>(null);
+  const [savingAll, setSavingAll] = useState(false);
 
   const [showFeatured, setShowFeatured] = useState(false);
   const [showBookings, setShowBookings] = useState(false);
@@ -38,7 +38,15 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     if (!isAdmin) {
       navigate('/admin/login');
-    }
+    } else {
+    fetch('/api/admin/get_featured.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setCategories(data.items);
+        }
+      });
+  }
   }, [isAdmin, navigate]);
 
   const toggleBookings = () => {
@@ -89,19 +97,33 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleSave = (id: number) => {
-    setLoadingId(id);
-    setCategories(prev =>
-      prev.map(cat =>
-        cat.id === id
-          ? { ...cat, text: editedText[id] ?? cat.text, image: editedImage[id] ?? cat.image }
-          : cat
-      )
-    );
-    setEditedText(prev => { const c = { ...prev }; delete c[id]; return c; });
-    setEditedImage(prev => { const c = { ...prev }; delete c[id]; return c; });
-    setTimeout(() => setLoadingId(null), 500);
-  };
+  const handleSaveAll = async () => {
+  setSavingAll(true);
+  const updated = categories.map(cat => ({
+    ...cat,
+    text: editedText[cat.id] ?? cat.text,
+    image: editedImage[cat.id] ?? cat.image,
+  }));
+
+  setCategories(updated);
+  setEditedText({});
+  setEditedImage({});
+
+  try {
+    const resp = await fetch('/api/admin/update_featured.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: updated }),
+    });
+    const data = await resp.json();
+    if (!data.success) alert('Failed to save changes.');
+  } catch (err) {
+    console.error('Save error:', err);
+    alert('Error saving data.');
+  }
+
+  setSavingAll(false);
+};
 
   const handleLogout = async () => {
     await logout();
@@ -149,12 +171,11 @@ const AdminDashboard: React.FC = () => {
                   style={{ maxWidth: '200px', maxHeight: '100px' }}
                 />
               </div>
-
-              <button onClick={() => handleSave(cat.id)} disabled={loadingId === cat.id}>
-                {loadingId === cat.id ? 'Saving...' : 'Save Changes'}
-              </button>
             </div>
           ))}
+          <button onClick={handleSaveAll} disabled={savingAll} className="save-all-button">
+            {savingAll ? 'Saving All...' : 'Save All Changes'}
+          </button>
         </div>
       )}
 
