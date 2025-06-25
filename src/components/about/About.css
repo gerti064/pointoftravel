@@ -16,7 +16,8 @@ html, body {
 }
 .about-section {
   padding-top:10px;
-  padding-bottom: 8rem;
+  padding-bottom: 1rem;
+  margin-bottom: 50px;
    /* bg-color-1 */
   color: #ffffff;
 }
@@ -51,7 +52,49 @@ html, body {
 }
 
 /* Image styles */
+/* Why Us Section */
+.why-us-section {
+  background-color: #5e3b76; /* Dark purple shade */
+  padding: 4rem 1rem;
+  color: #fff;
+  text-align: center;
+  max-width: 1400px;
+  margin: auto 6rem; /* centered with vertical spacing */
+  border-radius: 10px;
+}
 
+.why-us-container {
+
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.why-us-title {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.why-us-text {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #dcd1e9; /* lighter text */
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (min-width: 640px) {
+  .why-us-title {
+    font-size: 3.5rem;
+  }
+  .why-us-text {
+    font-size: 1.5rem;
+  }
+}
 
 /* Overlay text styles */
 .about-image-overlay-text {
@@ -125,29 +168,35 @@ html, body {
 }
 
 .about-subsection {
-  position: center;
-  max-height: 220px;
-  max-width: 1420px;
-  
-  padding-right: 1300px;
-  padding-bottom: 200px;
+  max-width: 1520px;
+  padding-right: 20px;
+  padding-bottom: 50px;
+
   background-color: #6b4487;
   font-family: "Lato", sans-serif;
-    border-radius: 10px;
+  border-radius: 10px;
 
+  margin: 0 auto 2rem auto; /* center horizontally + bottom margin */
+  /* remove invalid position */
 }
 
 .about-subtitle {
-  color:#ffffff;
+  color: #ffffff;
   font-weight: 700; /* lato-bold */
   font-size: 35px;
   margin-bottom: 2rem;
-  margin-left:14px;
-  width: 1400px;
-
+  margin-left: 0; /* reset */
+  width: fit-content; /* shrink to content width */
+  
+  margin-left: auto;
+  margin-right: auto; /* center horizontally */
+  text-align: center; /* center text inside */
+  display: block; /* ensure block for margin auto to work */
 }
 
 .about-text {
+  text-align: center; /* center text inside */
+
   font-weight: 400; /* lato-regular */
   margin-left:14px;
   font-size: 17px;
@@ -207,6 +256,17 @@ html, body {
   font-size: 0.875rem;
   margin-bottom: 1rem;
   color: #c0a9d1;
+}
+.mission-image-container {
+  margin-top: -2rem; /* space above the image */
+  text-align: center; /* center image */
+}
+
+.mission-image-container img {
+  height: 700px;
+  width: 100%; /* makes the image fill the container width */
+  max-width:100%; /* prevents overflowing */
+  border-radius: 10px; /* optional styling */
 }
 
 .team-description {
