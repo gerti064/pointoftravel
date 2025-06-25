@@ -26,11 +26,30 @@ const Contact: React.FC = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    alert(`Thanks, ${form.name}! Your message has been sent.`);
-    setForm({ name: "", email: "", message: "" });
-  };
+  const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch('/api/contact/contact.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert(`Thanks, ${form.name}! Your message has been sent.`);
+      setForm({ name: "", email: "", message: "" });
+    } else {
+      alert("Failed to send message: " + data.message);
+    }
+  } catch (error) {
+    console.error("Error sending message:", error);
+    alert("There was an error sending your message.");
+  }
+};
+
 
   return (
     <div className="contact-container">

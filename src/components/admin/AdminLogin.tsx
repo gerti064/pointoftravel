@@ -1,6 +1,7 @@
 // File: src/components/admin/AdminLogin.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAdminAuth } from '../../context/AdminAuthContext'; // ✅ import context
 
 interface LoginResponse {
   success: boolean;
@@ -14,6 +15,12 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { isAdmin, setIsAdmin } = useAdminAuth(); // ✅ include setIsAdmin
+
+  // ✅ Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (isAdmin) navigate('/admin/dashboard');
+  }, [isAdmin, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,22 +33,15 @@ export default function AdminLogin() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Important: include cookies for PHP session
+        credentials: 'include',
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      if (!resp.ok) {
-        // If status is 401 or other error
-        const errData: LoginResponse = await resp.json();
-        setErrorMessage(errData.message || 'Login failed');
-        setLoading(false);
-        return;
-      }
-
       const data: LoginResponse = await resp.json();
-      if (data.success) {
-        // Redirect to your admin dashboard or wherever you want:
-        navigate('/');
+
+      if (resp.ok && data.success) {
+        setIsAdmin(true); // ✅ manually update context
+        navigate('/admin/dashboard');
       } else {
         setErrorMessage(data.message || 'Invalid credentials');
       }

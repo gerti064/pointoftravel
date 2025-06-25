@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './header.css';
 import LogoImg from '../../assets/logo.png'; // adjust path if needed
+import { useAdminAuth } from '../../context/AdminAuthContext';
 
 type NavItem = {
   name: string;
@@ -18,7 +19,7 @@ const navItems: NavItem[] = [
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const { isAdmin, logout } = useAdminAuth();
   const navigate = useNavigate();
 
   const toggleMenu = () => {

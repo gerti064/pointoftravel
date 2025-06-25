@@ -25,20 +25,31 @@ const AdminDashboard: React.FC = () => {
 
   const [bookings, setBookings] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  // ✅ Check authentication status after initial load
   useEffect(() => {
-    if (!isAdmin) {
+    if (!loading && !isAdmin) {
       navigate('/admin/login');
-    } else {
-      fetch('/api/admin/get_featured.php')
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            setCategories(data.items);
-          }
-        });
     }
-  }, [isAdmin, navigate]);
+  }, [isAdmin, loading, navigate]);
+
+  // ✅ Load featured data if authenticated
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    fetch('/api/admin/get_featured.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setCategories(data.items);
+        }
+      })
+      .catch(err => {
+        console.error('Error loading featured items:', err);
+      })
+      .finally(() => setLoading(false));
+  }, [isAdmin]);
 
   const toggleBookings = () => {
     setShowBookings(prev => {
@@ -82,10 +93,11 @@ const AdminDashboard: React.FC = () => {
     });
   };
 
-  if (!isAdmin) return <p>Checking access...</p>;
+  const handleTextChange = (id: number, value: string) =>
+    setEditedText(prev => ({ ...prev, [id]: value }));
 
-  const handleTextChange = (id: number, value: string) => setEditedText(prev => ({ ...prev, [id]: value }));
-  const handleImageChange = (id: number, value: string) => setEditedImage(prev => ({ ...prev, [id]: value }));
+  const handleImageChange = (id: number, value: string) =>
+    setEditedImage(prev => ({ ...prev, [id]: value }));
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
     const file = e.target.files?.[0];
@@ -95,7 +107,10 @@ const AdminDashboard: React.FC = () => {
     formData.append('image', file);
 
     try {
-      const resp = await fetch('/api/admin/uploadImage.php', { method: 'POST', body: formData });
+      const resp = await fetch('/api/admin/uploadImage.php', {
+        method: 'POST',
+        body: formData,
+      });
       const data = await resp.json();
       if (data.success) {
         setEditedImage(prev => ({ ...prev, [id]: data.url }));
@@ -141,6 +156,8 @@ const AdminDashboard: React.FC = () => {
     navigate('/admin/login');
   };
 
+  if (loading) return <p>Loading dashboard...</p>;
+
   return (
     <div className="admin-dashboard-container">
       <h1>Admin Dashboard</h1>
@@ -154,24 +171,20 @@ const AdminDashboard: React.FC = () => {
           {categories.map(cat => (
             <div key={cat.id} className="category-edit-form">
               <h3>{cat.title} (ID: {cat.id})</h3>
-
               <label>Text:</label>
               <textarea
                 rows={3}
                 value={editedText[cat.id] ?? cat.text}
                 onChange={e => handleTextChange(cat.id, e.target.value)}
               />
-
               <label>Image URL:</label>
               <input
                 type="text"
                 value={editedImage[cat.id] ?? cat.image}
                 onChange={e => handleImageChange(cat.id, e.target.value)}
               />
-
               <label>Upload Image:</label>
               <input type="file" accept="image/*" onChange={e => handleFileUpload(e, cat.id)} />
-
               <div className="image-preview">
                 <p>Preview:</p>
                 <img
