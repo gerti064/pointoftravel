@@ -40,8 +40,11 @@ if (!is_array($data)) {
 // --- Validate required fields ---
 if (
     empty($data['tripType']) ||
-    empty($data['departureLocation']) ||
+    empty($data['from_location']) ||
+    empty($data['to_location']) ||
     empty($data['departureDate']) ||
+    empty($data['first_name']) ||          
+    empty($data['last_name']) ||           
     !isset($data['numberOfAdults'])
 ) {
     http_response_code(400);
@@ -56,9 +59,10 @@ $kids_ages_json = json_encode($data['kidsAges'] ?? []);
 
 // --- Prepare and bind SQL ---
 $stmt = $mysqli->prepare("INSERT INTO bookings (
-    trip_type, departure_location, departure_date, return_date,
-    number_of_adults, number_of_kids, travel_mode, hotel, kids_ages
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    trip_type, from_location, to_location, departure_date, return_date,
+    first_name, last_name, number_of_adults, number_of_kids, travel_mode,
+    hotel, phone, email, kids_ages
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)");
 
 if (!$stmt) {
     http_response_code(500);
@@ -67,15 +71,21 @@ if (!$stmt) {
 }
 
 $stmt->bind_param(
-    "ssssiiiss",
+    "sssssssiississ", // 12 placeholders: 7 strings, 2 ints, 3 strings
     $data['tripType'],
-    $data['departureLocation'],
+    $data['from_location'],
+    $data['to_location'],
     $data['departureDate'],
     $returnDate,
+    $data['first_name'],
+    $data['last_name'],
     $data['numberOfAdults'],
     $data['numberOfKids'],
     $data['travelMode'],
     $hotel,
+    $data['phone'],
+    $data['email'],
+
     $kids_ages_json
 );
 

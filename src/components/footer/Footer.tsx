@@ -2,7 +2,7 @@
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import './footer.css';
-
+ 
 const Footer: React.FC = () => {
   return (
     <footer className="pt-footer">
@@ -14,9 +14,9 @@ const Footer: React.FC = () => {
             Your gateway to unforgettable journeys around the world.
           </p>
           <div className="pt-footer-social">
-            <a href="#" className="pt-footer-social-link"><FaFacebookF /></a>
+            <a href="https://www.facebook.com/profile.php?id=100090808746160" className="pt-footer-social-link"><FaFacebookF /></a>
             <a href="#" className="pt-footer-social-link"><FaTwitter /></a>
-            <a href="#" className="pt-footer-social-link"><FaInstagram /></a>
+            <a href="https://www.instagram.com/pointoftravel.mk/" className="pt-footer-social-link"><FaInstagram /></a>
             <a href="#" className="pt-footer-social-link"><FaLinkedinIn /></a>
           </div>
         </div>

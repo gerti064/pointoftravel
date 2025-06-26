@@ -159,3 +159,34 @@
 .admin-logout-link:hover {
   text-decoration: underline;
 }
+/* Bookings Section */
+/* Bookings List */
+.bookings-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bookings-list li {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  transition: box-shadow 0.2s ease;
+}
+
+.bookings-list li:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.bookings-list li p {
+  margin: 0.4rem 0;
+}
+
+.bookings-list strong {
+  color: #343a40;
+}

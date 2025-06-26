@@ -215,24 +215,29 @@ const AdminDashboard: React.FC = () => {
           {bookings.length === 0 ? (
             <p>No bookings found.</p>
           ) : (
-            <ul>
-              {bookings.map((b, i) => (
-                <li key={i} style={{ marginBottom: '1rem' }}>
-                  <strong>{b.departure_location}</strong> — {b.trip_type}, {b.departure_date}
-                  {b.return_date && ` to ${b.return_date}`}<br />
-                  <strong>Adults:</strong> {b.number_of_adults}, <strong>Kids:</strong> {b.number_of_kids}<br />
-                  <strong>Travel mode:</strong> {b.travel_mode}, <strong>Hotel:</strong> {b.hotel || 'N/A'}<br />
-                  {b.kids_ages && (
-                    <>
-                      <strong>Kids' Ages:</strong>{" "}
-                      {Array.isArray(b.kids_ages)
-                        ? b.kids_ages.join(", ")
-                        : JSON.parse(b.kids_ages).join(", ")}
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <ul className="bookings-list">
+  {bookings.map((b, i) => (
+    <li key={i}>
+      <strong>Passenger:</strong> {b.first_name} {b.last_name}<br />
+      <strong>Email:</strong> {b.email} <br />
+      <strong>Phone:</strong> {b.phone} <br />
+      <strong>From:</strong> {b.from_location} → <strong>To:</strong> {b.to_location}<br />
+      <strong>Trip:</strong> {b.trip_type}, <strong>Departure:</strong> {b.departure_date}
+      {b.return_date && <> <strong> to:</strong> {b.return_date}</>}<br />
+      <strong>Adults:</strong> {b.number_of_adults}, <strong>Kids:</strong> {b.number_of_kids}<br />
+      <strong>Travel mode:</strong> {b.travel_mode}, <strong>Hotel:</strong> {b.hotel || 'N/A'}<br />
+      {b.kids_ages && (
+        <>
+          <strong>Kids' Ages:</strong>{" "}
+          {Array.isArray(b.kids_ages)
+            ? b.kids_ages.join(", ")
+            : JSON.parse(b.kids_ages).join(", ")}
+        </>
+      )}
+    </li>
+  ))}
+</ul>
+
           )}
         </div>
       )}

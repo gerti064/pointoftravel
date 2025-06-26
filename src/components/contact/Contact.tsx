@@ -12,8 +12,8 @@ import {
 import "./contact.css";
 
 const socialLinks = [
-  { icon: <FaFacebookF />, href: "https://www.facebook.com/yourpage", label: "Facebook" },
-  { icon: <FaInstagram />, href: "https://www.instagram.com/yourpage", label: "Instagram" },
+  { icon: <FaFacebookF />, href: "https://www.facebook.com/profile.php?id=100090808746160", label: "Facebook" },
+  { icon: <FaInstagram />, href: "https://www.instagram.com/pointoftravel.mk/", label: "Instagram" },
   { icon: <FaTwitter />, href: "https://twitter.com/yourhandle", label: "X (Twitter)" },
   { icon: <FaLinkedinIn />, href: "https://www.linkedin.com/in/yourprofile", label: "LinkedIn" },
   { icon: <FaWhatsapp />, href: "https://wa.me/1234567890", label: "WhatsApp" },
@@ -27,29 +27,28 @@ const Contact: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await fetch('/api/contact/contact.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
+    try {
+      const response = await fetch("http://localhost/api/contact/add_message.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (data.success) {
-      alert(`Thanks, ${form.name}! Your message has been sent.`);
-      setForm({ name: "", email: "", message: "" });
-    } else {
-      alert("Failed to send message: " + data.message);
+      if (data.success) {
+        alert(`Thanks, ${form.name}! Your message has been sent.`);
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        alert("Failed to send message: " + data.message);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("There was an error sending your message.");
     }
-  } catch (error) {
-    console.error("Error sending message:", error);
-    alert("There was an error sending your message.");
-  }
-};
-
+  };
 
   return (
     <div className="contact-container">
@@ -58,18 +57,18 @@ const Contact: React.FC = () => {
         <div className="contact-info">
           <div className="info-item lato-regular">
             <FaMapMarkerAlt className="info-icon" />
-            <span>123 Your Street, Your City, Your Country</span>
+            <span>29 Noemvri br.3, Tetovo, North Macedonia</span>
           </div>
           <div className="info-item">
             <FaPhoneAlt className="info-icon" />
             <div>
-              <a href="tel:+1234567890" className="info-link lato-reular">+1 (234) 567-890</a>
-              <a href="tel:+0987654321" className="info-link lato-regular">+0 (987) 654-321</a>
+              <a href="tel:+38970627447" className="info-link lato-regular">+389 70 627 447</a>
+              <a href="tel:+38971800093" className="info-link lato-regular">+389 71 800 093</a>
             </div>
           </div>
           <div className="info-item">
             <FaEnvelope className="info-icon" />
-            <a href="mailto:info@yourdomain.com" className="info-link">info@yourdomain.com</a>
+            <a href="mailto:pointoftravel@outlook.com" className="info-link">pointoftravel@outlook.com</a>
           </div>
 
           <div className="social-section">
@@ -94,12 +93,12 @@ const Contact: React.FC = () => {
             <h2 className="section-title">Our Location</h2>
             <div className="map-container">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086814620724!2d-122.41941568468121!3d37.77492977975979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064f1d4e299%3A0x5b4e8099ab0b50e1!2sYour%20Business%20Place!5e0!3m2!1sen!2sus!4v1625068991230"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2964.700551878516!2d20.9689266!3d42.006701699999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1353f0eb66a20017%3A0x878f100908ba48f2!2zMjkgTsOrbnRvcmkgMywgVGV0b3bDqyAxMjIw!5e0!3m2!1sen!2smk!4v1750945065018!5m2!1sen!2smk"
                 className="map-iframe"
                 allowFullScreen
                 loading="lazy"
                 title="Our Location"
-              />
+              ></iframe>
             </div>
           </div>
         </div>
