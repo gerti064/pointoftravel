@@ -72,26 +72,29 @@ const AdminDashboard: React.FC = () => {
       return next;
     });
   };
-
-  const toggleMessages = () => {
-    setShowMessages(prev => {
-      const next = !prev;
-      if (next) {
-        fetch('/api/contact/get_messages.php')
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              setMessages(data.messages);
-            }
-          })
-          .catch(err => {
-            console.error('Error loading messages:', err);
-            alert('Error loading messages.');
-          });
-      }
-      return next;
-    });
-  };
+ 
+const toggleMessages = () => {
+  setShowMessages(prev => {
+    const next = !prev;
+    if (next) {
+      fetch('http://localhost/pointoftravel/public/api/contact/get_messages.php')
+        .then(res => res.json())
+        .then(data => {
+          // data is an array, no 'success' field
+          if (Array.isArray(data)) {
+            setMessages(data);
+          } else {
+            alert('Failed to load messages.');
+          }
+        })
+        .catch(err => {
+          console.error('Error loading messages:', err);
+          alert('Error loading messages.');
+        });
+    }
+    return next;
+  });
+};
 
   const handleTextChange = (id: number, value: string) =>
     setEditedText(prev => ({ ...prev, [id]: value }));
@@ -235,7 +238,7 @@ const AdminDashboard: React.FC = () => {
         </>
       )}
     </li>
-  ))}
+  ))} 
 </ul>
 
           )}
@@ -245,25 +248,26 @@ const AdminDashboard: React.FC = () => {
       <button onClick={toggleMessages}>
         {showMessages ? '▲ Hide Messages' : '▼ Show Messages'}
       </button>
-      {showMessages && (
-        <div className="dropdown-section">
-          <h2>Messages</h2>
-          {messages.length === 0 ? (
-            <p>No messages yet.</p>
-          ) : (
-            <ul>
-              {messages.map((msg, i) => (
-                <li key={i}>
-                  <strong>From:</strong> {msg.name} ({msg.email})<br />
-                  <strong>Message:</strong> {msg.message}<br />
-                  <strong>Date:</strong> {msg.created_at}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-
+{showMessages && (
+  <div className="dropdown-section">
+    <h2>Messages</h2>
+    {messages.length === 0 ? (
+      <p>No messages yet.</p>
+    ) : (
+      <ul className="messages-list">
+        {messages.map((msg, i) => (
+          <li key={i}>
+            <p><strong>From:</strong> {msg.Name}</p>
+            <p><strong>Email:</strong> {msg.Email}</p>
+            <p><strong>Message:</strong><br /> {msg.Message}</p>
+            <p><strong>Submitted At:</strong> {msg.submitted_at ? new Date(msg.submitted_at).toLocaleString() : 'N/A'}</p>
+            <p><strong>ID:</strong> {msg.id}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+)}
       <button onClick={handleLogout} className="admin-logout-link">
         Logout
       </button>

@@ -20,27 +20,28 @@ const socialLinks = [
 ];
 
 const Contact: React.FC = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    const payload = { name, email, message };
+
     try {
-      const response = await fetch("http://localhost/api/contact/add_message.php", {
+      const response = await fetch("http://localhost/pointoftravel/public/api/contact/add_messages.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
-
       const data = await response.json();
-
+       
       if (data.success) {
-        alert(`Thanks, ${form.name}! Your message has been sent.`);
-        setForm({ name: "", email: "", message: "" });
+        alert(`Thanks, ${name}! Your message has been sent.`);
+        setName("");
+        setEmail("");
+        setMessage("");
       } else {
         alert("Failed to send message: " + data.message);
       }
@@ -110,8 +111,8 @@ const Contact: React.FC = () => {
               id="name"
               name="name"
               type="text"
-              value={form.name}
-              onChange={handleChange}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
               className="form-input lato-regular"
             />
@@ -122,8 +123,8 @@ const Contact: React.FC = () => {
               id="email"
               name="email"
               type="email"
-              value={form.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="form-input lato-regular"
             />
@@ -134,8 +135,8 @@ const Contact: React.FC = () => {
               id="message"
               name="message"
               rows={5}
-              value={form.message}
-              onChange={handleChange}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               required
               className="form-textarea lato-regular"
             />

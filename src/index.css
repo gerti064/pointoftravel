@@ -97,4 +97,34 @@ button:focus-visible {
     background-color: #ffffff;
   }
 }
- 
+ /* ── Responsive Layout for Small Screens ── */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  h1 {
+    font-size: 2em;
+    text-align: center;
+  }
+
+  .card {
+    padding: 1em;
+  }
+
+  button {
+    font-size: 0.95em;
+    padding: 0.6em 1em;
+  }
+
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+
+  #root {
+    padding: 1rem;
+  }
+}

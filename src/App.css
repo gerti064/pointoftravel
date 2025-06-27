@@ -1,5 +1,5 @@
 #root {
-  max-width:100rem;
+  max-width: 100rem;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -39,4 +39,24 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* ✅ Mobile Responsiveness */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .read-the-docs {
+    font-size: 0.9rem;
+  }
 }
