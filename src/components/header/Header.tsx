@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Header.css';
+import TestButton from './TestButton';
 import LogoImg from '../../assets/logo.png'; // adjust path if needed
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
@@ -111,6 +112,8 @@ const Header: React.FC = () => {
               </NavLink>
             ))}
 
+              {!isAdmin && <TestButton />} 
+
             {isAdmin && (
               <>
                 <div className="nav-desktop-admin-separator" />
@@ -179,6 +182,8 @@ const Header: React.FC = () => {
             {item.name}
           </NavLink>
         ))}
+
+          {!isAdmin && <TestButton />}
 
         {isAdmin && (
           <>
