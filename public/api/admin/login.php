@@ -27,7 +27,7 @@ if (empty($username) || empty($password)) {
 
 try {
     // --- Connect to MySQL ---
-    $mysqli = new mysqli("localhost", "root", "", "pointoftravel");
+    $mysqli = new mysqli("localhost", "gerti", "123", "pointoftravel");
 
     if ($mysqli->connect_error) {
         throw new Exception("Connection failed: " . $mysqli->connect_error);
