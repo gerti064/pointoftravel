@@ -1,7 +1,7 @@
 // src/components/Header/Header.tsx
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import './header.css';
+import './Header.css';
 import LogoImg from '../../assets/logo.png'; // adjust path if needed
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
