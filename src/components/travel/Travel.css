@@ -19,18 +19,25 @@
   --input-bg: #ffffff;
   --input-placeholder: #aaa;
 }
- 
+
 /* ==== Form Container ==== */
 .travel-form-wrapper {
-  margin:6rem;
+  margin: 6rem;
   display: flex;
   justify-content: center;
-  padding: 2rem 2rem;
-  background-color: f6edfc;
+  padding: 2rem;
+  background-color: #f6edfc;
   min-height: 90vh;
   border-radius: 0.75rem;
 }
+@media (max-width: 768px) {
+  .travel-form-wrapper {
+    margin: 3rem 1rem;
+    padding: 1rem;
+  }
+}
 
+/* ==== Form ==== */
 .travel-form {
   background-color: var(--white);
   border-radius: 0.75rem;
@@ -38,12 +45,11 @@
   max-width: 600px;
   width: 100%;
   padding: 2rem 2.5rem;
-  
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: var(--purple-7);
 }
 
-/* ==== Form Heading ==== */
+/* ==== Heading ==== */
 .travel-form h2 {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -62,19 +68,19 @@
   border-radius: 2px;
 }
 
-/* ==== General Field Styles ==== */
-.travel-form .form-group {
+/* ==== Form Fields ==== */
+.form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 1.25rem;
 }
-.travel-form .form-group label {
+.form-group label {
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: var(--purple-4);
 }
-.travel-form .form-group input,
-.travel-form .form-group select {
+.form-group input,
+.form-group select {
   padding: 0.625rem 0.75rem;
   border: 1px solid var(--border-gray);
   border-radius: 0.5rem;
@@ -83,71 +89,70 @@
   color: var(--purple-9);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.travel-form .form-group input::placeholder,
-.travel-form .form-group select::placeholder {
+.form-group input::placeholder,
+.form-group select::placeholder {
   color: var(--input-placeholder);
 }
-
-.travel-form .form-group input:focus,
-.travel-form .form-group select:focus {
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
   border-color: var(--purple-2);
   box-shadow: 0 0 0 3px rgba(107, 68, 135, 0.2);
 }
 
-/* ==== Two-Column Row ==== */
-.travel-form .form-row {
+/* ==== Form Layout ==== */
+.form-row {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
-.travel-form .form-row .form-group {
+.form-row .form-group {
   flex: 1 1 200px;
 }
 
-/* ==== Full-Width Field ==== */
-.travel-form .full-width {
+/* ==== Full Width Field ==== */
+.full-width {
   width: 90%;
 }
 
-.travel-form .location-row {
+/* ==== Location Row ==== */
+.location-row {
   display: flex;
   gap: 1rem;
   margin-bottom: 1.25rem;
   align-items: flex-end;
+  margin-top: 0.5rem;
 }
-
-.travel-form .location-row .form-group {
+.location-row .form-group {
   flex: 1 1 50%;
 }
-
-.travel-form .location-row input {
+.location-row input {
   background-color: #f6f2fb;
   border: 1px solid var(--purple-4);
   border-radius: 0.5rem;
   padding: 0.75rem 1rem;
   font-size: 1rem;
 }
-
-.travel-form .location-row input:focus {
+.location-row input:focus {
   border-color: var(--purple-2);
   box-shadow: 0 0 0 3px rgba(107, 68, 135, 0.2);
 }
-/* ==== Special Field: Radio/Checkbox Container ==== */
-.travel-form .options-row {
+
+/* ==== Options (Radio/Checkbox) ==== */
+.options-row {
   display: flex;
   gap: 1.5rem;
   margin-bottom: 1.25rem;
 }
-.travel-form .options-row .option {
+.options-row .option {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.95rem;
   color: var(--purple-5);
 }
-.travel-form .options-row input[type="radio"],
-.travel-form .options-row input[type="checkbox"] {
+.options-row input[type="radio"],
+.options-row input[type="checkbox"] {
   accent-color: var(--purple-3);
   width: 1rem;
   height: 1rem;
@@ -155,7 +160,7 @@
 }
 
 /* ==== Submit Button ==== */
-.travel-form .submit-btn {
+.submit-btn {
   display: block;
   width: 100%;
   padding: 0.75rem 0;
@@ -170,28 +175,15 @@
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
-.travel-form .submit-btn:hover {
+.submit-btn:hover {
   background-color: var(--purple-3);
 }
-.travel-form .submit-btn:active {
+.submit-btn:active {
   transform: scale(0.98);
 }
 
-/* ==== Responsive Adjustments ==== */
-@media (max-width: 640px) {
-  .travel-form {
-    padding: 1.5rem 1rem;
-  }
-  .travel-form h2 {
-    font-size: 1.5rem;
-  }
-  .travel-form .form-row {
-    flex-direction: column;
-  }
-}
-
-/* ==== Example: Background Accent Box ==== */
-.travel-form .accent-box {
+/* ==== Accent Box ==== */
+.accent-box {
   background-color: var(--purple-6);
   padding: 1rem;
   border-radius: 0.5rem;
@@ -200,19 +192,18 @@
   text-align: center;
   font-size: 0.95rem;
 }
-/* === Destination Group Title Above From/To === */
-.travel-form .destination-group .group-label {
+
+/* ==== Destination Labels ==== */
+.destination-group .group-label {
   font-size: 1rem;
   font-weight: 600;
   color: var(--purple-4);
   margin-bottom: 0.25rem;
-  display: block;
   text-align: center;
+  display: block;
   padding-left: 0.2rem;
 }
-
-/* === Ensure "From" and "To" are aligned left === */
-.travel-form .small-label {
+.small-label {
   font-size: 1rem;
   font-weight: 500;
   color: var(--purple-5);
@@ -222,23 +213,28 @@
   padding-left: 0.2rem;
 }
 
-/* Already existing layout */
-.travel-form .location-row {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
-  align-items: flex-end;
-}
-
-.name-group .form-group {
-  flex: 1 1 200px;
-}
-.travel-form input#email {
+/* ==== Email Specific Styling ==== */
+input#email {
   background-color: white;
   color: black;
 }
-
-.travel-form input#email::placeholder {
+input#email::placeholder {
   color: #999;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 640px) {
+  .travel-form {
+    padding: 1.5rem 1rem;
+  }
+  .travel-form h2 {
+    font-size: 1.5rem;
+  }
+  .form-row,
+  .location-row {
+    flex-direction: column;
+  }
+  .submit-btn {
+    margin-top: 2rem;
+  }
 }

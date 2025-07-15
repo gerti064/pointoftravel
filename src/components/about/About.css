@@ -1,159 +1,104 @@
-/* About Section Styles */
-/* Global Reset - Place at the very top of your CSS file */
-.lato-bold-italic   { font-family: "Lato", sans-serif; font-weight: 700; font-style: italic; }
+/* Global Reset */
+.lato-bold-italic {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
 
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden; /* Prevents horizontal scrollbars */
-  box-sizing: border-box; /* Ensures padding/border are included in element's width */
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-/* Also good practice to apply box-sizing to all elements */
 * {
   box-sizing: border-box;
 }
+
 .about-section {
-  padding-top:10px;
+  padding-top: 10px;
   padding-bottom: 1rem;
   margin-bottom: 50px;
-   /* bg-color-1 */
   color: #ffffff;
 }
 
 .about-container {
- 
   margin-left: auto;
   margin-right: auto;
   padding-left: 1rem;
   padding-right: 1rem;
   text-align: center;
-  
 }
 
 /* Heading */
 .about-title {
   font-family: "Lato", sans-serif;
-  font-weight: 700; /* lato-bold */
-  font-size: 3.5rem;
-  line-height: 1.1;
-  margin-bottom: 2rem;
-}
-.about-title-image-container {
-  position: center; /* Essential for positioning children */
-  display: inline-block; /* Or block, depending on desired layout, but inline-block is often good for containing images */
-  max-width: 1425px; /* Match the max-width of your image for consistency */
-  width: 2000px; /* Ensure it takes full available width within its parent */
-  margin-top: 2em;
-  margin-bottom: 2rem; /* Move margin from image to container */
-  border-radius: 1rem; /* Apply border-radius to the container if you want the overlay text to respect it */
-  overflow: hidden; /* Important to clip content to the border-radius */
-}
-
-/* Image styles */
-/* Why Us Section */
-.why-us-section {
-  background-color: #5e3b76; /* Dark purple shade */
-  padding: 4rem 1rem;
-  color: #fff;
-  text-align: center;
-  max-width: 1400px;
-  margin: auto 6rem; /* centered with vertical spacing */
-  border-radius: 10px;
-}
-
-.why-us-container {
-
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.why-us-title {
-  font-family: "Lato", sans-serif;
   font-weight: 700;
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
+  font-size: unset;
+  line-height: unset;
+  margin-bottom: 0;
 }
 
-.why-us-text {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 1.25rem;
-  line-height: 1.6;
-  color: #dcd1e9; /* lighter text */
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-/* Responsive adjustments */
-@media (min-width: 640px) {
-  .why-us-title {
-    font-size: 3.5rem;
-  }
-  .why-us-text {
-    font-size: 1.5rem;
-  }
+.about-title-image-container {
+  position: center;
+  display: inline-block;
+  max-width: 1425px;
+  width: 2000px;
+  margin-top: 2em;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+  overflow: hidden;
 }
 
 /* Overlay text styles */
 .about-image-overlay-text {
-  position: absolute; /* Take text out of normal flow */
-  top: 50%; /* Position from the top */
-  left: 50%; /* Position from the left */
-  transform: translate(-50%, -50%); /* Center the text perfectly */
-  color: white; /* Or any contrasting color */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
   font-family: "Lato", sans-serif;
   font-weight: 700;
-  font-size: 2.5rem; /* Adjust size as needed */
+  font-size: 2.5rem;
   text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Optional: add shadow for readability */
-  padding: 0.5rem 1rem; /* Optional: add some padding around the text */
-  /* background-color: rgba(0, 0, 0, 0.5); Optional: add a semi-transparent background to the text for better contrast */
-  /* border-radius: 0.5rem; Optional: rounded corners for the background */
-  z-index: 2; /* Ensure text is above the image */
-  width: 100%; /* Allow text to span the width of the container for centering */
-}
-.root-overlay-image {
-  position:absolute; /* Positions relative to the viewport (stays in place when scrolling) */
-  padding-bottom: 8rem;
-  max-height: 550px;
-  margin-top: 1rem;/* OR position: absolute; if you want it to scroll with the page, relative to body */
-  top: 0;     /* Align to the top edge */
-  left: 0;    /* Align to the left edge */
-  width: 100%; /* Make it span the full width of the viewport */
-  height: 100%; /* Make it span the full height of the viewport */
-  object-fit: cover; /* Ensures the image covers the area without distortion */
-  pointer-events: none; /* VERY IMPORTANT: Allows clicks/interactions to pass through to content underneath */
-  z-index: 1; /* Place it on top of almost everything else (adjust as needed) */
-   /* Optional: Make it semi-transparent if you want content to show through */
-}
-/* Adjustments for the main title that contains this structure */
-.about-title {
-  /* Remove any conflicting styles like font-size directly on .about-title
-     that might affect the overlay text, or set it to 'unset' */
-  font-size: unset; /* Or whatever makes sense for your h1 */
-  line-height: unset;
-  margin-bottom: 0; /* The margin is now on .about-title-image-container */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  padding: 0.5rem 1rem;
+  z-index: 2;
+  width: 100%;
 }
 
+.root-overlay-image {
+  position: absolute;
+  padding-bottom: 8rem;
+  max-height: 550px;
+  margin-top: 1rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* Intro paragraph */
 .about-intro {
   font-family: "Lato", sans-serif;
-  font-weight: 400; /* lato-regular */
+  font-weight: 400;
   font-size: 1.25rem;
   line-height: 1.6;
-  color: #e0d7f0; /* lighter purple */
+  color: #e0d7f0;
   margin-bottom: 2.5rem;
 }
 
-/* Grid layout for mission and vision */
+/* Grid layout */
 .about-grid {
-    max-height: 1700px;
-    max-width: 1400px;
-    padding-top:195px;
-    padding-bottom:1rem;
+  max-height: 1700px;
+  max-width: 1400px;
+  padding-top: 195px;
+  padding-bottom: 1rem;
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
@@ -171,38 +116,87 @@ html, body {
   max-width: 1520px;
   padding-right: 20px;
   padding-bottom: 50px;
-
   background-color: #6b4487;
   font-family: "Lato", sans-serif;
   border-radius: 10px;
-
-  margin: 0 auto 2rem auto; /* center horizontally + bottom margin */
-  /* remove invalid position */
+  margin: 0 auto 2rem auto;
 }
 
 .about-subtitle {
   color: #ffffff;
-  font-weight: 700; /* lato-bold */
+  font-weight: 700;
   font-size: 35px;
   margin-bottom: 2rem;
-  margin-left: 0; /* reset */
-  width: fit-content; /* shrink to content width */
-  
   margin-left: auto;
-  margin-right: auto; /* center horizontally */
-  text-align: center; /* center text inside */
-  display: block; /* ensure block for margin auto to work */
+  margin-right: auto;
+  text-align: center;
+  display: block;
+  width: fit-content;
 }
 
 .about-text {
-  text-align: center; /* center text inside */
-
-  font-weight: 400; /* lato-regular */
-  margin-left:14px;
+  text-align: center;
+  font-weight: 400;
+  margin-left: 14px;
   font-size: 17px;
   color: #ffffff;
-  width:1400px;
+  width: 1400px;
+}
 
+/* Mission Image */
+.mission-image-container {
+  margin-top: -2rem;
+  text-align: center;
+}
+
+.mission-image-container img {
+  height: 700px;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* Why Us Section */
+.why-us-section {
+  background-color: #5e3b76;
+  padding: 4rem 1rem;
+  color: #fff;
+  text-align: center;
+  max-width: 1400px;
+  margin: auto 6rem;
+  border-radius: 10px;
+}
+
+.why-us-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.why-us-title {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.why-us-text {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #dcd1e9;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .why-us-title {
+    font-size: 3.5rem;
+  }
+
+  .why-us-text {
+    font-size: 1.5rem;
+  }
 }
 
 /* Team Section */
@@ -218,7 +212,6 @@ html, body {
   color: #000000;
 }
 
-/* Team grid */
 .team-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -232,12 +225,11 @@ html, body {
   }
 }
 
-/* Individual team card */
 .team-card {
-  background-color: #6b4487; /* slightly lighter purple */
+  background-color: #6b4487;
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
 }
@@ -257,17 +249,6 @@ html, body {
   margin-bottom: 1rem;
   color: #c0a9d1;
 }
-.mission-image-container {
-  margin-top: -2rem; /* space above the image */
-  text-align: center; /* center image */
-}
-
-.mission-image-container img {
-  height: 700px;
-  width: 100%; /* makes the image fill the container width */
-  max-width:100%; /* prevents overflowing */
-  border-radius: 10px; /* optional styling */
-}
 
 .team-description {
   font-family: "Lato", sans-serif;
@@ -275,4 +256,88 @@ html, body {
   font-size: 1rem;
   color: #dcd1e9;
   flex-grow: 1;
+}
+
+/* ------------------------- */
+/* ✅ Responsive Enhancements */
+/* ------------------------- */
+
+@media (max-width: 1400px) {
+  .about-text {
+    width: 90%;
+    margin: 0 auto;
+    font-size: 1rem;
+  }
+
+  .about-subsection {
+    width: 90%;
+    padding: 1rem;
+  }
+
+  .mission-image-container img {
+    height: auto;
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .about-title-image-container {
+    width: 100%;
+  }
+
+  .about-image-overlay-text {
+    font-size: 2rem;
+    padding: 0.5rem;
+  }
+
+  .why-us-text {
+    font-size: 1.1rem;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 2.5rem;
+  }
+
+  .why-us-section {
+    margin: 2rem 1rem;
+    padding: 2rem 1rem;
+  }
+
+  .team-card {
+    padding: 1rem;
+  }
+
+  .mission-image-container img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-image-overlay-text {
+    font-size: 1.5rem;
+  }
+
+  .about-intro {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+
+  .why-us-title {
+    font-size: 2rem;
+  }
+
+  .about-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .team-title {
+    font-size: 2rem;
+  }
 }
