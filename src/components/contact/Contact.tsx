@@ -9,7 +9,7 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import "./Contact.css
+import "./Contact.css;
 
 const socialLinks = [
   { icon: <FaFacebookF />, href: "https://www.facebook.com/profile.php?id=100090808746160", label: "Facebook" },
