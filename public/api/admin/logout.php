@@ -1,22 +1,31 @@
 <?php
 // File: public/api/admin/logout.php
 
-session_start();
+// --- Allowed Origins ---
+$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-// --- CORS headers ---
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Match frontend
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: http://46.101.211.140"); // fallback
+}
+
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// --- Handle preflight (OPTIONS) ---
+// --- Handle preflight request ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// --- Unset session variables ---
+// --- Start session ---
+session_start();
+
+// --- Clear session variables ---
 $_SESSION = [];
 
 // --- Destroy session cookie ---
@@ -33,8 +42,11 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// --- Destroy session ---
+// --- Destroy the session itself ---
 session_destroy();
 
-// --- Return JSON response ---
-echo json_encode(['success' => true, 'message' => 'Logged out successfully']);
+// --- Response ---
+echo json_encode([
+    'success' => true,
+    'message' => 'Logged out successfully'
+]);

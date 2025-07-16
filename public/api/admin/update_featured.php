@@ -1,40 +1,59 @@
 <?php
-// Enable error reporting for debugging
+// File: public/api/update_featured.php
+
+// --- Enable error reporting ---
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Include DB connection
+// --- Allowed origins ---
+$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: http://46.101.211.140"); // fallback
+}
+
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Content-Type: application/json");
+
+// --- Handle preflight request ---
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// --- Include DB connection ---
 require_once '../db_config.php';
 
-// Set response type
-header('Content-Type: application/json');
-
-// Decode incoming JSON
+// --- Decode JSON body ---
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Validate data
+// --- Validate incoming data ---
 if (!isset($data['items']) || !is_array($data['items'])) {
     echo json_encode(['success' => false, 'message' => 'No items array provided']);
     exit;
 }
 
-// Prepare statement
+// --- Prepare SQL statement ---
 $stmt = $conn->prepare("UPDATE featured_items SET text = ?, image = ? WHERE id = ?");
 if (!$stmt) {
     echo json_encode(['success' => false, 'message' => 'Prepare failed: ' . $conn->error]);
     exit;
 }
 
-// Update each item
+// --- Execute updates ---
 foreach ($data['items'] as $item) {
     if (!isset($item['id'], $item['text'], $item['image'])) {
-        continue; // Skip invalid entries
+        continue; // skip incomplete
     }
     $stmt->bind_param("ssi", $item['text'], $item['image'], $item['id']);
     $stmt->execute();
 }
 
-// Success response
+// --- Return response ---
 echo json_encode(['success' => true]);
-?>
