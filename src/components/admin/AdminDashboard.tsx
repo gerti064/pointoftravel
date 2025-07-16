@@ -11,7 +11,7 @@ interface Category {
 }
 
 const AdminDashboard: React.FC = () => {
-  const { isAdmin, logout } = useAdminAuth();
+const { isAdmin, setIsAdmin, logout } = useAdminAuth();
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState<Category[]>([]);
