@@ -1,4 +1,3 @@
-// src/context/AdminAuthContext.tsx
 import React, {
   createContext,
   useContext,
@@ -22,10 +21,12 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [adminId, setAdminId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const resp = await fetch('/api/admin/checkAuth.php', {
+        const resp = await fetch(`${API_BASE}/admin/checkAuth.php`, {
           credentials: 'include',
         });
         if (resp.ok) {
@@ -51,11 +52,11 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
     };
 
     checkAuth();
-  }, []);
+  }, [API_BASE]);
 
   const logout = async () => {
     try {
-      const resp = await fetch('/api/admin/logout.php', {
+      const resp = await fetch(`${API_BASE}/admin/logout.php`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -67,7 +68,6 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
     } catch (err) {
       console.error('Logout failed:', err);
     } finally {
-      // Always clear state
       setIsAdmin(false);
       setAdminId(null);
     }

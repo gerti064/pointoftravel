@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Header.css';
 import TestButton from './TestButton';
-import LogoImg from '../../assets/logo.png'; // adjust path if needed
+import LogoImg from '../../assets/logo.png';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
 type NavItem = {
@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAdmin, logout } = useAdminAuth();
+  const { isAdmin, setIsAdmin, logout } = useAdminAuth(); // ✅ fixed
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -30,7 +30,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        const resp = await fetch('/api/admin/checkAuth.php', {
+        const resp = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/checkAuth.php`, {
           method: 'GET',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -50,7 +50,7 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/admin/logout.php', {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/logout.php`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -63,7 +63,6 @@ const Header: React.FC = () => {
     }
   };
 
-  // Render a loader while checking auth
   if (isAdmin === null) {
     return (
       <header className="header">
@@ -74,7 +73,7 @@ const Header: React.FC = () => {
                 <img
                   src={LogoImg}
                   alt="Logo"
-                  onError={e => { (e.currentTarget as HTMLImageElement).src = '/vite.svg' }}
+                  onError={e => { (e.currentTarget as HTMLImageElement).src = '/vite.svg'; }}
                 />
               </NavLink>
             </div>
@@ -89,18 +88,16 @@ const Header: React.FC = () => {
     <header className="header">
       <div className="header-container">
         <div className="header-content">
-          {/* Logo */}
           <div className="header-logo">
             <NavLink to="/">
               <img
                 src={LogoImg}
                 alt="Logo"
-                onError={e => { (e.currentTarget as HTMLImageElement).src = '/vite.svg' }}
+                onError={e => { (e.currentTarget as HTMLImageElement).src = '/vite.svg'; }}
               />
             </NavLink>
           </div>
 
-          {/* Desktop Nav */}
           <nav className="nav-desktop">
             {navItems.map(item => (
               <NavLink
@@ -112,7 +109,7 @@ const Header: React.FC = () => {
               </NavLink>
             ))}
 
-              {!isAdmin && <TestButton />} 
+            {!isAdmin && <TestButton />}
 
             {isAdmin && (
               <>
@@ -134,7 +131,6 @@ const Header: React.FC = () => {
             )}
           </nav>
 
-          {/* Mobile Menu Button */}
           <button
             className="menu-button"
             onClick={toggleMenu}
@@ -142,27 +138,11 @@ const Header: React.FC = () => {
             aria-label="Toggle navigation"
           >
             {isOpen ? (
-              <svg
-                className="menu-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                width="24"
-                height="24"
-              >
+              <svg className="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg
-                className="menu-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                width="24"
-                height="24"
-              >
+              <svg className="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
@@ -170,7 +150,6 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Nav Links */}
       <nav className={`nav-mobile ${isOpen ? 'show-mobile' : ''}`}>
         {navItems.map(item => (
           <NavLink
@@ -183,7 +162,7 @@ const Header: React.FC = () => {
           </NavLink>
         ))}
 
-          {!isAdmin && <TestButton />}
+        {!isAdmin && <TestButton />}
 
         {isAdmin && (
           <>

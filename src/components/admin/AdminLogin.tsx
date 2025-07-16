@@ -22,36 +22,40 @@ export default function AdminLogin() {
     if (isAdmin) navigate('/admin/dashboard');
   }, [isAdmin, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setErrorMessage(null);
 
-    try {
-      const resp = await fetch('/api/admin/login.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ username: username.trim(), password }),
-      });
+  //this is changed to make the backend work on the deployed version
 
-      const data: LoginResponse = await resp.json();
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setErrorMessage(null);
 
-      if (resp.ok && data.success) {
-        setIsAdmin(true); // ✅ manually update context
-        navigate('/admin/dashboard');
-      } else {
-        setErrorMessage(data.message || 'Invalid credentials');
-      }
-    } catch (err) {
-      console.error(err);
-      setErrorMessage('Unexpected error. Please try again.');
-    } finally {
-      setLoading(false);
+  try {
+    const resp = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/login.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ username: username.trim(), password }),
+    });
+
+    const data: LoginResponse = await resp.json();
+
+    if (resp.ok && data.success) {
+      setIsAdmin(true);
+      navigate('/admin/dashboard');
+    } else {
+      setErrorMessage(data.message || 'Invalid credentials');
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setErrorMessage('Unexpected error. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
+//this is changed to make the backend work on the deployed version
 
   return (
     <div style={{ maxWidth: 400, margin: '2rem auto', padding: '1rem', border: '1px solid #ccc', borderRadius: 8 }}>
