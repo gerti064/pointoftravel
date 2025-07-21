@@ -10,7 +10,7 @@ ob_start(); // Buffer output to prevent HTML leaks
 session_start();
 
 // --- CORS: Allow both local and live origins ---
-$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140'];
+$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140:5173', 'http://46.101.211.140'];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
