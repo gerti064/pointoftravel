@@ -31,7 +31,7 @@ const Home: React.FC = () => {
 
   // Fetch featured items from backend
   useEffect(() => {
-    fetch('/api//get_featured.php')
+fetch('http://46.101.211.140/api/admin/get_featured.php')
       .then(res => res.json())
       .then(data => {
         if (data.success) {
