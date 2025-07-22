@@ -9,6 +9,8 @@ $allowed_origins = [
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+file_put_contents('/tmp/origin.log', "Origin: " . $origin . "\n", FILE_APPEND);
+
 
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
