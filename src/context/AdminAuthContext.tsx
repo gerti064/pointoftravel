@@ -20,8 +20,15 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [adminId, setAdminId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
 
   const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+  // Show loader only if checkAuth takes >300ms
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -29,8 +36,11 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
         const resp = await fetch(`${API_BASE}/admin/checkAuth.php`, {
           credentials: 'include',
         });
+
         if (resp.ok) {
           const data = await resp.json();
+          console.log('[checkAuth.php] Response:', data);
+
           if (data.isAuthenticated) {
             setIsAdmin(true);
             setAdminId(data.adminId ?? null);
@@ -39,11 +49,12 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
             setAdminId(null);
           }
         } else {
+          console.warn('[checkAuth.php] Server responded with error:', resp.status);
           setIsAdmin(false);
           setAdminId(null);
         }
       } catch (e) {
-        console.error('Error checking admin auth:', e);
+        console.error('[checkAuth.php] Network error:', e);
         setIsAdmin(false);
         setAdminId(null);
       } finally {
@@ -62,6 +73,8 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
       });
 
       const data = await resp.json();
+      console.log('[logout] Response:', data);
+
       if (!data.success) {
         console.warn('Logout request returned false:', data.message);
       }
@@ -73,7 +86,7 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
     }
   };
 
-  if (loading) return <div>Checking admin session...</div>;
+  if (loading && showLoader) return <div>Checking admin session...</div>;
 
   return (
     <AdminAuthContext.Provider value={{ isAdmin, adminId, setIsAdmin, setAdminId, logout }}>
