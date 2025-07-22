@@ -4,7 +4,7 @@
 // --- Debug mode (disable in production) ---
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-ob_start(); // Buffer output to prevent HTML leaks
+ob_start(); // Prevent accidental HTML output
 
 // --- Start session ---
 session_start();
@@ -17,15 +17,20 @@ $allowed_origins = [
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+file_put_contents('/tmp/origin.log', "LOGIN Origin: $origin\n", FILE_APPEND);
+
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Headers: Content-Type");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
 } else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140");
+    http_response_code(403);
+    header("Content-Type: application/json");
+    echo json_encode(["error" => "Origin not allowed"]);
+    exit();
 }
 
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Content-Type: application/json");
 
 // --- Handle preflight request ---
@@ -37,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // --- Include DB config ---
 require_once '../db_config.php';
 
-// --- Read and decode JSON input ---
+// --- Parse JSON input ---
 $input = json_decode(file_get_contents("php://input"), true);
 $username = $input['username'] ?? '';
 $password = $input['password'] ?? '';
@@ -53,19 +58,15 @@ try {
         throw new Exception("DB connection failed: " . $conn->connect_error);
     }
 
-    // --- Prepare and execute user fetch ---
     $stmt = $conn->prepare("SELECT id, password FROM admins WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
-        // Optional debug log (remove in production)
-        // file_put_contents("debug_log.txt", "Input: $password\nStored: " . $row['password'] . "\n", FILE_APPEND);
-
         if (password_verify($password, $row['password'])) {
             $_SESSION['admin_id'] = $row['id'];
-            ob_clean();
+            ob_clean(); // Clear any earlier output
             echo json_encode(['success' => true, 'message' => 'Login successful']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid password']);
@@ -78,6 +79,6 @@ try {
     echo json_encode([
         'success' => false,
         'message' => 'Server error',
-        'error' => $e->getMessage() // remove in production
+        'error' => $e->getMessage() // ⚠️ Remove in production
     ]);
 }

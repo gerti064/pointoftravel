@@ -9,23 +9,36 @@ $allowed_origins = [
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+file_put_contents('/tmp/origin.log', "LOGOUT Origin: $origin\n", FILE_APPEND);
 
-if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: $origin");
-} else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140");
-}
-
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
-// --- Handle preflight ---
+// Handle CORS preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Methods: POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+    } else {
+        http_response_code(403);
+        echo json_encode(["error" => "Origin not allowed"]);
+    }
     exit();
 }
+
+// Only allow matching origins
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+} else {
+    http_response_code(403);
+    header("Content-Type: application/json");
+    echo json_encode(["error" => "Origin not allowed"]);
+    exit();
+}
+
+header("Content-Type: application/json");
 
 // --- Start session ---
 session_start();

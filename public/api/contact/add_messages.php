@@ -9,22 +9,36 @@ $allowed_origins = [
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: $origin");
-} else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140");
-}
-
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
+file_put_contents('/tmp/origin.log', "ADD_MESSAGES Origin: $origin\n", FILE_APPEND);
 
 // --- Handle preflight ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Methods: POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+    } else {
+        http_response_code(403);
+        echo json_encode(["error" => "Origin not allowed"]);
+    }
     exit();
 }
+
+// --- Validate and apply CORS headers ---
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+} else {
+    http_response_code(403);
+    header("Content-Type: application/json");
+    echo json_encode(["error" => "Origin not allowed"]);
+    exit();
+}
+
+header("Content-Type: application/json");
 
 // --- Error reporting (development only) ---
 ini_set('display_errors', 1);
@@ -35,7 +49,7 @@ error_reporting(E_ALL);
 $mysqli = new mysqli("localhost", "gerti", "123", "pointoftravel");
 if ($mysqli->connect_errno) {
     http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Database connection failed"]);
+    echo json_encode(["success" => false, "message" => "Database connection failed: " . $mysqli->connect_error]);
     exit;
 }
 
@@ -67,7 +81,7 @@ if ($stmt->execute()) {
     echo json_encode(["success" => true, "message" => "Message received"]);
 } else {
     http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Insert failed"]);
+    echo json_encode(["success" => false, "message" => "Insert failed: " . $stmt->error]);
 }
 
 $stmt->close();

@@ -1,8 +1,7 @@
 <?php
 // File: public/api/db_config.php
 
-// Allow JSON responses and debugging (disable error display in production)
-header("Content-Type: application/json");
+// --- Enable error reporting (for development only, remove in production) ---
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -27,6 +26,11 @@ $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
 // --- Handle connection error ---
 if ($conn->connect_error) {
+    // Set response type if used in an API context
+    if (!headers_sent()) {
+        header("Content-Type: application/json");
+    }
+
     http_response_code(500);
     echo json_encode([
         "success" => false,

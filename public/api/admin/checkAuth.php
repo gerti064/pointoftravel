@@ -10,24 +10,10 @@ $allowed_origins = [
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-// Log origin for debugging
+// Optional: Log for debugging
 file_put_contents('/tmp/origin.log', "Origin: $origin\n", FILE_APPEND);
 
-// --- Handle preflight (OPTIONS request) early ---
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    if (in_array($origin, $allowed_origins)) {
-        header("Access-Control-Allow-Origin: $origin");
-        header("Access-Control-Allow-Credentials: true");
-        header("Access-Control-Allow-Headers: Content-Type");
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    } else {
-        http_response_code(403);
-        echo json_encode(["error" => "Origin not allowed"]);
-    }
-    exit();
-}
-
-// --- Validate origin before sending headers ---
+// --- CORS Headers ---
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Credentials: true");
@@ -35,22 +21,30 @@ if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 } else {
     http_response_code(403);
+    header('Content-Type: application/json');
     echo json_encode(["error" => "Origin not allowed"]);
     exit();
 }
 
+// --- Preflight (OPTIONS) ---
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// --- Set JSON Response Header ---
 header("Content-Type: application/json");
 
-// --- Include DB config ---
+// --- Include DB Config ---
 require_once '../db_config.php';
 
-// --- Start session ---
+// --- Start Session ---
 session_start();
 
-// --- Check admin authentication ---
+// --- Check Admin Authentication ---
 $isAuthenticated = isset($_SESSION['admin_id']) && intval($_SESSION['admin_id']) > 0;
 
-// --- Respond with auth status ---
+// --- Response ---
 echo json_encode([
     'isAuthenticated' => $isAuthenticated,
     'adminId' => $isAuthenticated ? intval($_SESSION['admin_id']) : null

@@ -9,22 +9,36 @@ $allowed_origins = [
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: $origin");
-} else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140");
-}
+file_put_contents('/tmp/origin.log', "CONTACT GET Origin: $origin\n", FILE_APPEND);
 
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
-// --- Handle preflight request ---
+// --- Handle preflight (OPTIONS request) ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Methods: GET, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+    } else {
+        http_response_code(403);
+        echo json_encode(["error" => "Origin not allowed"]);
+    }
     exit();
 }
+
+// --- Validate and apply CORS headers ---
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+} else {
+    http_response_code(403);
+    header("Content-Type: application/json");
+    echo json_encode(["error" => "Origin not allowed"]);
+    exit();
+}
+
+header("Content-Type: application/json");
 
 // --- DB Connection ---
 $mysqli = new mysqli("localhost", "gerti", "123", "pointoftravel");

@@ -9,23 +9,36 @@ $allowed_origins = [
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+file_put_contents('/tmp/origin.log', "UPLOAD_IMAGE Origin: $origin\n", FILE_APPEND);
 
-if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: $origin");
-} else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140");
-}
-
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
-// --- Handle preflight request ---
+// --- Handle preflight request early ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Methods: POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+    } else {
+        http_response_code(403);
+        echo json_encode(["error" => "Origin not allowed"]);
+    }
     exit();
 }
+
+// --- Apply headers if origin allowed ---
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+} else {
+    http_response_code(403);
+    header("Content-Type: application/json");
+    echo json_encode(["error" => "Origin not allowed"]);
+    exit();
+}
+
+header("Content-Type: application/json");
 
 // --- Ensure upload directory exists ---
 $uploadDir = __DIR__ . '/uploads/';
