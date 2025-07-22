@@ -2,13 +2,23 @@
 // File: public/api/admin/checkAuth.php
 
 // --- CORS Setup ---
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://46.101.211.140:5173',
+    'http://46.101.211.140'
+];
 
-// Temporarily log the origin for debugging (optional)
-file_put_contents('/tmp/origin.log', "Origin: " . $origin . "\n", FILE_APPEND);
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-// Reflect the origin dynamically (to avoid CORS mismatch)
-header("Access-Control-Allow-Origin: $origin");
+// Optional: log the incoming origin for debugging
+file_put_contents('/tmp/origin.log', "Origin: $origin\n", FILE_APPEND);
+
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: http://46.101.211.140"); // safe fallback
+}
+
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -20,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// --- Include DB config (if needed later) ---
+// --- Include DB config ---
 require_once '../db_config.php';
 
 // --- Start session ---
