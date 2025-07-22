@@ -9,13 +9,18 @@ ob_start(); // Buffer output to prevent HTML leaks
 // --- Start session ---
 session_start();
 
-// --- CORS: Allow both local and live origins ---
-$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140:5173', 'http://46.101.211.140'];
+// --- CORS Setup ---
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://46.101.211.140:5173',
+    'http://46.101.211.140'
+];
+
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
 } else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140"); // fallback
+    header("Access-Control-Allow-Origin: http://46.101.211.140");
 }
 
 header("Access-Control-Allow-Credentials: true");
@@ -29,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// --- Include DB config (contains host, username, password, db name) ---
-require_once '../db_config.php'; // $conn is initialized here
+// --- Include DB config ---
+require_once '../db_config.php';
 
 // --- Read and decode JSON input ---
 $input = json_decode(file_get_contents("php://input"), true);
@@ -48,18 +53,19 @@ try {
         throw new Exception("DB connection failed: " . $conn->connect_error);
     }
 
-    // --- Fetch user by username ---
+    // --- Prepare and execute user fetch ---
     $stmt = $conn->prepare("SELECT id, password FROM admins WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
-        file_put_contents("debug_log.txt", "Input: $password\nStored: " . $row['password'] . "\n", FILE_APPEND);
+        // Optional debug log (remove in production)
+        // file_put_contents("debug_log.txt", "Input: $password\nStored: " . $row['password'] . "\n", FILE_APPEND);
 
         if (password_verify($password, $row['password'])) {
             $_SESSION['admin_id'] = $row['id'];
-            ob_clean(); // Optional
+            ob_clean();
             echo json_encode(['success' => true, 'message' => 'Login successful']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid password']);
@@ -72,6 +78,6 @@ try {
     echo json_encode([
         'success' => false,
         'message' => 'Server error',
-        'error' => $e->getMessage() // Remove this in production
+        'error' => $e->getMessage() // remove in production
     ]);
 }

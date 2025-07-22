@@ -1,25 +1,31 @@
 <?php
 // File: public/api/db_config.php
 
-// Detect environment
+// Allow JSON responses and debugging (disable error display in production)
+header("Content-Type: application/json");
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// --- Detect environment ---
 $hostName = $_SERVER['SERVER_NAME'] ?? 'localhost';
 
-// Default to production credentials
+// --- Default production DB credentials ---
 $db_host = "localhost";
 $db_user = "gerti";
 $db_pass = "123";
 $db_name = "pointoftravel";
 
-// If running locally, override credentials
+// --- Override for local development ---
 if (in_array($hostName, ['localhost', '127.0.0.1'])) {
     $db_user = "root";
     $db_pass = "";
 }
 
-// Connect to MySQL
+// --- Create connection ---
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
-// Handle errors
+// --- Handle connection error ---
 if ($conn->connect_error) {
     http_response_code(500);
     echo json_encode([

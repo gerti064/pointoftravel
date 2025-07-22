@@ -1,8 +1,13 @@
 <?php
 // File: public/api/admin/checkAuth.php
 
-// --- Allowed origins ---
-$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140:5173', 'http://46.101.211.140'];
+// --- CORS Setup ---
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://46.101.211.140:5173',
+    'http://46.101.211.140'
+];
+
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
@@ -22,16 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// --- Include DB config in case future logic requires DB
+// --- Include DB config (if needed later) ---
 require_once '../db_config.php';
 
 // --- Start session ---
 session_start();
 
-// --- Check if admin is authenticated ---
+// --- Check admin authentication ---
 $isAuthenticated = isset($_SESSION['admin_id']) && intval($_SESSION['admin_id']) > 0;
 
-// --- Return response ---
+// --- Respond with auth status ---
 echo json_encode([
     'isAuthenticated' => $isAuthenticated,
     'adminId' => $isAuthenticated ? intval($_SESSION['admin_id']) : null

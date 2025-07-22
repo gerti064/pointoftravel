@@ -1,14 +1,19 @@
 <?php
 // File: public/api/admin/logout.php
 
-// --- Allowed Origins ---
-$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140:5173','http://46.101.211.140'];
+// --- CORS Setup ---
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://46.101.211.140:5173',
+    'http://46.101.211.140'
+];
+
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
 } else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140"); // fallback
+    header("Access-Control-Allow-Origin: http://46.101.211.140");
 }
 
 header("Access-Control-Allow-Credentials: true");
@@ -16,7 +21,7 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// --- Handle preflight request ---
+// --- Handle preflight ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -25,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // --- Start session ---
 session_start();
 
-// --- Clear session variables ---
+// --- Clear session data ---
 $_SESSION = [];
 
 // --- Destroy session cookie ---
@@ -42,10 +47,10 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// --- Destroy the session itself ---
+// --- Fully destroy session ---
 session_destroy();
 
-// --- Response ---
+// --- Respond ---
 echo json_encode([
     'success' => true,
     'message' => 'Logged out successfully'

@@ -1,14 +1,18 @@
 <?php
 // File: public/api/contact/contact.php
 
-// --- Allow both local and live origins ---
-$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140:5173','http://46.101.211.140'];
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+// --- CORS Setup ---
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://46.101.211.140:5173',
+    'http://46.101.211.140'
+];
 
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
 } else {
-    header("Access-Control-Allow-Origin: http://46.101.211.140"); // fallback
+    header("Access-Control-Allow-Origin: http://46.101.211.140");
 }
 
 header("Access-Control-Allow-Credentials: true");
@@ -16,7 +20,7 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// --- Handle preflight request ---
+// --- Handle preflight ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -35,7 +39,7 @@ if ($mysqli->connect_errno) {
     exit;
 }
 
-// --- Read and validate JSON ---
+// --- Parse input ---
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (
@@ -49,7 +53,7 @@ if (
     exit;
 }
 
-// --- Prepare SQL ---
+// --- Prepare insert ---
 $stmt = $mysqli->prepare("INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)");
 if (!$stmt) {
     http_response_code(500);
@@ -59,7 +63,7 @@ if (!$stmt) {
 
 $stmt->bind_param("sss", $data['name'], $data['email'], $data['message']);
 
-// --- Execute & respond ---
+// --- Execute and respond ---
 if ($stmt->execute()) {
     echo json_encode(["success" => true, "message" => "Message received"]);
 } else {

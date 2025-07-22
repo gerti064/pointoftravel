@@ -1,13 +1,18 @@
 <?php
 // File: public/api/update_featured.php
 
-// --- Enable error reporting ---
+// --- Enable error reporting (disable in production) ---
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// --- Allowed origins ---
-$allowed_origins = ['http://localhost:5173', 'http://46.101.211.140:5173','http://46.101.211.140'];
+// --- CORS Setup ---
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://46.101.211.140:5173',
+    'http://46.101.211.140'
+];
+
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowed_origins)) {
@@ -30,23 +35,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // --- Include DB connection ---
 require_once '../db_config.php';
 
-// --- Decode JSON body ---
+// --- Decode JSON input ---
 $data = json_decode(file_get_contents("php://input"), true);
 
-// --- Validate incoming data ---
+// --- Validate input structure ---
 if (!isset($data['items']) || !is_array($data['items'])) {
-    echo json_encode(['success' => false, 'message' => 'No items array provided']);
+    echo json_encode([
+        'success' => false,
+        'message' => 'No items array provided'
+    ]);
     exit;
 }
 
-// --- Prepare SQL statement ---
+// --- Prepare SQL update statement ---
 $stmt = $conn->prepare("UPDATE featured_items SET text = ?, image = ? WHERE id = ?");
 if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Prepare failed: ' . $conn->error]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Prepare failed: ' . $conn->error
+    ]);
     exit;
 }
 
-// --- Execute updates ---
+// --- Loop through and update each item ---
 foreach ($data['items'] as $item) {
     if (!isset($item['id'], $item['text'], $item['image'])) {
         continue; // skip incomplete
@@ -55,5 +66,7 @@ foreach ($data['items'] as $item) {
     $stmt->execute();
 }
 
-// --- Return response ---
+$stmt->close();
+
+// --- Success response ---
 echo json_encode(['success' => true]);
