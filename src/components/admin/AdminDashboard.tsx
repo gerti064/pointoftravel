@@ -11,7 +11,7 @@ interface Category {
 }
 
 const AdminDashboard: React.FC = () => {
-const { isAdmin, setIsAdmin, logout } = useAdminAuth();
+  const { isAdmin, logout, checkAuthStatus } = useAdminAuth();
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -27,14 +27,16 @@ const { isAdmin, setIsAdmin, logout } = useAdminAuth();
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Check authentication status after initial load
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
+
   useEffect(() => {
     if (!loading && !isAdmin) {
       navigate('/admin/login');
     }
   }, [isAdmin, loading, navigate]);
 
-  // ✅ Load featured data if authenticated
   useEffect(() => {
     if (!isAdmin) return;
 
@@ -72,29 +74,28 @@ const { isAdmin, setIsAdmin, logout } = useAdminAuth();
       return next;
     });
   };
- 
-const toggleMessages = () => {
-  setShowMessages(prev => {
-    const next = !prev;
-    if (next) {
-      fetch("http://46.101.211.140/api/contact/get_messages.php")
-        .then(res => res.json())
-        .then(data => {
-          // data is an array, no 'success' field
-          if (Array.isArray(data)) {
-            setMessages(data);
-          } else {
-            alert('Failed to load messages.');
-          }
-        })
-        .catch(err => {
-          console.error('Error loading messages:', err);
-          alert('Error loading messages.');
-        });
-    }
-    return next;
-  });
-};
+
+  const toggleMessages = () => {
+    setShowMessages(prev => {
+      const next = !prev;
+      if (next) {
+        fetch("http://46.101.211.140/api/contact/get_messages.php")
+          .then(res => res.json())
+          .then(data => {
+            if (Array.isArray(data)) {
+              setMessages(data);
+            } else {
+              alert('Failed to load messages.');
+            }
+          })
+          .catch(err => {
+            console.error('Error loading messages:', err);
+            alert('Error loading messages.');
+          });
+      }
+      return next;
+    });
+  };
 
   const handleTextChange = (id: number, value: string) =>
     setEditedText(prev => ({ ...prev, [id]: value }));
@@ -110,7 +111,7 @@ const toggleMessages = () => {
     formData.append('image', file);
 
     try {
-      const resp = await fetch("http://46.101.211.140/api/admin/uploadImage.php" {
+      const resp = await fetch("http://46.101.211.140/api/admin/uploadImage.php", {
         method: 'POST',
         body: formData,
       });
@@ -219,28 +220,28 @@ const toggleMessages = () => {
             <p>No bookings found.</p>
           ) : (
             <ul className="bookings-list">
-  {bookings.map((b, i) => (
-    <li key={i}>
-      <strong>Passenger:</strong> {b.first_name} {b.last_name}<br />
-      <strong>Email:</strong> {b.email} <br />
-      <strong>Phone:</strong> {b.phone} <br />
-      <strong>From:</strong> {b.from_location} → <strong>To:</strong> {b.to_location}<br />
-      <strong>Trip:</strong> {b.trip_type}, <strong>Departure:</strong> {b.departure_date}
-      {b.return_date && <> <strong> to:</strong> {b.return_date}</>}<br />
-      <strong>Adults:</strong> {b.number_of_adults}, <strong>Kids:</strong> {b.number_of_kids}<br />
-      <strong>Travel mode:</strong> {b.travel_mode}, <strong>Hotel:</strong> {b.hotel || 'N/A'}<br />
-      {b.kids_ages && (
-        <>
-          <strong>Kids' Ages:</strong>{" "}
-          {Array.isArray(b.kids_ages)
-            ? b.kids_ages.join(", ")
-            : JSON.parse(b.kids_ages).join(", ")}
-        </>
-      )}
-    </li>
-  ))} 
-</ul>
-
+              {bookings.map((b, i) => (
+                <li key={i}>
+                  <strong>Passenger:</strong> {b.first_name} {b.last_name}<br />
+                  <strong>Email:</strong> {b.email}<br />
+                  <strong>Phone:</strong> {b.phone}<br />
+                  <strong>From:</strong> {b.from_location} → <strong>To:</strong> {b.to_location}<br />
+                  <strong>Trip:</strong> {b.trip_type}, <strong>Departure:</strong> {b.departure_date}
+                  {b.return_date && <> <strong> to:</strong> {b.return_date}</>}<br />
+                  <strong>Adults:</strong> {b.number_of_adults}, <strong>Kids:</strong> {b.number_of_kids}<br />
+                  <strong>Travel mode:</strong> {b.travel_mode}, <strong>Hotel:</strong> {b.hotel || 'N/A'}<br />
+                  {b.kids_ages && (
+                    <>
+                      <strong>Kids' Ages:</strong> {
+                        Array.isArray(b.kids_ages)
+                          ? b.kids_ages.join(", ")
+                          : JSON.parse(b.kids_ages).join(", ")
+                      }
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       )}
@@ -248,26 +249,27 @@ const toggleMessages = () => {
       <button onClick={toggleMessages}>
         {showMessages ? '▲ Hide Messages' : '▼ Show Messages'}
       </button>
-{showMessages && (
-  <div className="dropdown-section">
-    <h2>Messages</h2>
-    {messages.length === 0 ? (
-      <p>No messages yet.</p>
-    ) : (
-      <ul className="messages-list">
-        {messages.map((msg, i) => (
-          <li key={i}>
-            <p><strong>From:</strong> {msg.Name}</p>
-            <p><strong>Email:</strong> {msg.Email}</p>
-            <p><strong>Message:</strong><br /> {msg.Message}</p>
-            <p><strong>Submitted At:</strong> {msg.submitted_at ? new Date(msg.submitted_at).toLocaleString() : 'N/A'}</p>
-            <p><strong>ID:</strong> {msg.id}</p>
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-)}
+      {showMessages && (
+        <div className="dropdown-section">
+          <h2>Messages</h2>
+          {messages.length === 0 ? (
+            <p>No messages yet.</p>
+          ) : (
+            <ul className="messages-list">
+              {messages.map((msg, i) => (
+                <li key={i}>
+                  <p><strong>From:</strong> {msg.Name}</p>
+                  <p><strong>Email:</strong> {msg.Email}</p>
+                  <p><strong>Message:</strong><br /> {msg.Message}</p>
+                  <p><strong>Submitted At:</strong> {msg.submitted_at ? new Date(msg.submitted_at).toLocaleString() : 'N/A'}</p>
+                  <p><strong>ID:</strong> {msg.id}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
       <button onClick={handleLogout} className="admin-logout-link">
         Logout
       </button>
