@@ -26,7 +26,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   useEffect(() => {
     (async () => {
       try {
-        const resp = await fetch('/api/admin/checkAuth.php', {
+        const resp = await fetch("http://46.101.211.140/api/admin/checkAuth.php", {
           method: 'GET',
           credentials: 'include',
           headers: {
