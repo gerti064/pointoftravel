@@ -30,7 +30,7 @@ const Contact: React.FC = () => {
     const payload = { name, email, message };
 
     try {
-      const response = await fetch("http://46.101.211.140/api/bookings/add_messages.php", {
+      const response = await fetch("http://46.101.211.140/api/contact/add_messages.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
