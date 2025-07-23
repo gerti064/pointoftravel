@@ -1,19 +1,20 @@
 <?php
 // File: public/api/admin/checkAuth.php
 
-// --- CORS Setup ---
 $allowed_origins = [
     'http://localhost:5173',
     'http://46.101.211.140:5173',
     'http://46.101.211.140'
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+// fallback to allow if no origin (e.g., direct browser call)
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-// Optional: Debug log
-// file_put_contents('/tmp/origin.log', "Origin: $origin\n", FILE_APPEND);
+if ($origin === null) {
+    // Allow when accessed directly (no origin header)
+    $origin = 'http://46.101.211.140';
+}
 
-// --- CORS Headers ---
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Credentials: true");
@@ -22,29 +23,23 @@ if (in_array($origin, $allowed_origins)) {
 } else {
     http_response_code(403);
     header('Content-Type: application/json');
-    echo json_encode(["error" => "Origin not allowed"]);
+    echo json_encode(["error" => "Origin not allowed", "received" => $origin]);
     exit();
 }
 
-// --- Handle preflight (OPTIONS) ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// --- JSON Response Header ---
 header("Content-Type: application/json");
 
-// --- Include DB Config ---
 require_once '../db_config.php';
 
-// --- Start Session ---
 session_start();
 
-// --- Check Admin Auth ---
 $isAuthenticated = isset($_SESSION['admin_id']) && intval($_SESSION['admin_id']) > 0;
 
-// --- Return JSON Response ---
 echo json_encode([
     'isAuthenticated' => $isAuthenticated,
     'adminId' => $isAuthenticated ? intval($_SESSION['admin_id']) : null
