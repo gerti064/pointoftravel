@@ -56,7 +56,7 @@ const Travel: React.FC = () => {
 
     console.log("Payload:", payload);
 
-    fetch("http://46.101.211.140/public/api/bookings/add_booking.php", {
+    fetch("http://46.101.211.140/api/bookings/add_booking.php", {
 
       method: "POST",
       headers: { "Content-Type": "application/json" },
