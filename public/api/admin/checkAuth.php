@@ -10,8 +10,8 @@ $allowed_origins = [
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-// Optional: Log for debugging
-file_put_contents('/tmp/origin.log', "Origin: $origin\n", FILE_APPEND);
+// Optional: Debug log
+// file_put_contents('/tmp/origin.log', "Origin: $origin\n", FILE_APPEND);
 
 // --- CORS Headers ---
 if (in_array($origin, $allowed_origins)) {
@@ -26,13 +26,13 @@ if (in_array($origin, $allowed_origins)) {
     exit();
 }
 
-// --- Preflight (OPTIONS) ---
+// --- Handle preflight (OPTIONS) ---
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// --- Set JSON Response Header ---
+// --- JSON Response Header ---
 header("Content-Type: application/json");
 
 // --- Include DB Config ---
@@ -41,10 +41,10 @@ require_once '../db_config.php';
 // --- Start Session ---
 session_start();
 
-// --- Check Admin Authentication ---
+// --- Check Admin Auth ---
 $isAuthenticated = isset($_SESSION['admin_id']) && intval($_SESSION['admin_id']) > 0;
 
-// --- Response ---
+// --- Return JSON Response ---
 echo json_encode([
     'isAuthenticated' => $isAuthenticated,
     'adminId' => $isAuthenticated ? intval($_SESSION['admin_id']) : null
