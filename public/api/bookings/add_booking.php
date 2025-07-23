@@ -11,13 +11,14 @@ $allowed_origins = [
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 file_put_contents('/tmp/origin.log', "ADD_BOOKING Origin: $origin\n", FILE_APPEND);
 
-// --- Handle preflight request ---
+// Handle preflight (OPTIONS) requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     if (in_array($origin, $allowed_origins)) {
         header("Access-Control-Allow-Origin: $origin");
         header("Access-Control-Allow-Credentials: true");
         header("Access-Control-Allow-Methods: POST, OPTIONS");
         header("Access-Control-Allow-Headers: Content-Type");
+        http_response_code(204); // No Content
     } else {
         http_response_code(403);
         echo json_encode(["error" => "Origin not allowed"]);
@@ -25,12 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// --- Apply headers if origin allowed ---
+// Allow actual POST request
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Credentials: true");
-    header("Access-Control-Allow-Methods: POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
 } else {
     http_response_code(403);
     header("Content-Type: application/json");
@@ -40,12 +41,12 @@ if (in_array($origin, $allowed_origins)) {
 
 header("Content-Type: application/json");
 
-// --- Enable error reporting (dev only) ---
+// --- Debugging + Error Reporting ---
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// --- Connect to DB ---
+// --- Connect to MySQL ---
 $mysqli = new mysqli("localhost", "gerti", "123", "pointoftravel");
 if ($mysqli->connect_errno) {
     http_response_code(500);
@@ -53,7 +54,7 @@ if ($mysqli->connect_errno) {
     exit;
 }
 
-// --- Parse JSON input ---
+// --- Get JSON input ---
 $rawInput = file_get_contents("php://input");
 $data = json_decode($rawInput, true);
 if (!is_array($data)) {
@@ -62,17 +63,17 @@ if (!is_array($data)) {
     exit;
 }
 
-// --- Validate required fields ---
+// --- Required fields ---
 $required = ['tripType', 'from_location', 'to_location', 'departureDate', 'first_name', 'last_name', 'numberOfAdults'];
 foreach ($required as $field) {
-    if (empty($data[$field]) && $data[$field] !== 0) {
+    if (!isset($data[$field]) || (empty($data[$field]) && $data[$field] !== 0)) {
         http_response_code(400);
         echo json_encode(["success" => false, "message" => "Missing required field: $field"]);
         exit;
     }
 }
 
-// --- Optional fields ---
+// --- Optional Fields ---
 $returnDate     = $data['returnDate'] ?? null;
 $hotel          = $data['hotel'] ?? null;
 $phone          = $data['phone'] ?? null;
@@ -81,7 +82,7 @@ $kidsAgesJson   = json_encode($data['kidsAges'] ?? []);
 $numberOfKids   = $data['numberOfKids'] ?? 0;
 $travelMode     = $data['travelMode'] ?? null;
 
-// --- Prepare SQL ---
+// --- SQL Insert ---
 $stmt = $mysqli->prepare("INSERT INTO bookings (
     trip_type, from_location, to_location, departure_date, return_date,
     first_name, last_name, number_of_adults, number_of_kids, travel_mode,
@@ -112,7 +113,7 @@ $stmt->bind_param(
     $kidsAgesJson
 );
 
-// --- Execute and return response ---
+// --- Execute Query ---
 if ($stmt->execute()) {
     echo json_encode(["success" => true]);
 } else {
