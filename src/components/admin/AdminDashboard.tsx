@@ -38,7 +38,7 @@ const { isAdmin, setIsAdmin, logout } = useAdminAuth();
   useEffect(() => {
     if (!isAdmin) return;
 
-    fetch('/api/admin/get_featured.php')
+    fetch("http://46.101.211.140/api/admin/get_featured.php")
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -55,7 +55,7 @@ const { isAdmin, setIsAdmin, logout } = useAdminAuth();
     setShowBookings(prev => {
       const next = !prev;
       if (next) {
-        fetch('/api/bookings/get_bookings.php')
+        fetch("http://46.101.211.140/api/bookings/get_bookings.php")
           .then(res => res.json())
           .then(data => {
             if (data.success) {
@@ -77,7 +77,7 @@ const toggleMessages = () => {
   setShowMessages(prev => {
     const next = !prev;
     if (next) {
-      fetch('http://localhost/pointoftravel/public/api/contact/get_messages.php')
+      fetch("http://46.101.211.140/api/contact/get_messages.php")
         .then(res => res.json())
         .then(data => {
           // data is an array, no 'success' field
@@ -110,7 +110,7 @@ const toggleMessages = () => {
     formData.append('image', file);
 
     try {
-      const resp = await fetch('/api/admin/uploadImage.php', {
+      const resp = await fetch("http://46.101.211.140/api/admin/uploadImage.php" {
         method: 'POST',
         body: formData,
       });
@@ -139,7 +139,7 @@ const toggleMessages = () => {
     setEditedImage({});
 
     try {
-      const resp = await fetch('/api/admin/update_featured.php', {
+      const resp = await fetch("http://46.101.211.140/api/admin/update_featured.php", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: updated }),
