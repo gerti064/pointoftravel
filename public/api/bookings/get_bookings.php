@@ -65,8 +65,8 @@ if (!$result) {
 
 $bookings = [];
 while ($row = $result->fetch_assoc()) {
-    // Decode JSON field
-    $row['kids_ages'] = json_decode($row['kids_ages'], true);
+    // Decode JSON field safely
+    $row['kids_ages'] = json_decode($row['kids_ages'] ?? '[]', true);
     $bookings[] = $row;
 }
 
