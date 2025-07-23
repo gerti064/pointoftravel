@@ -12,6 +12,7 @@ type AuthCtx = {
   setIsAdmin: (v: boolean) => void;
   setAdminId: (v: number | null) => void;
   logout: () => Promise<void>;
+  checkAuthStatus: () => Promise<void>; // ✅ Added
 };
 
 const AdminAuthContext = createContext<AuthCtx | undefined>(undefined);
@@ -24,45 +25,42 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-  // Show loader only if checkAuth takes >300ms
   useEffect(() => {
     const timer = setTimeout(() => setShowLoader(true), 300);
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const resp = await fetch(`${API_BASE}/admin/checkAuth.php`, {
-          credentials: 'include',
-        });
+  const checkAuthStatus = async () => {
+    try {
+      const resp = await fetch(`${API_BASE}/admin/checkAuth.php`, {
+        credentials: 'include',
+      });
 
-        if (resp.ok) {
-          const data = await resp.json();
-          console.log('[checkAuth.php] Response:', data);
+      if (resp.ok) {
+        const data = await resp.json();
+        console.log('[checkAuth.php] Response:', data);
 
-          if (data.isAuthenticated) {
-            setIsAdmin(true);
-            setAdminId(data.adminId ?? null);
-          } else {
-            setIsAdmin(false);
-            setAdminId(null);
-          }
+        if (data.isAuthenticated) {
+          setIsAdmin(true);
+          setAdminId(data.adminId ?? null);
         } else {
-          console.warn('[checkAuth.php] Server responded with error:', resp.status);
           setIsAdmin(false);
           setAdminId(null);
         }
-      } catch (e) {
-        console.error('[checkAuth.php] Network error:', e);
+      } else {
+        console.warn('[checkAuth.php] Server responded with error:', resp.status);
         setIsAdmin(false);
         setAdminId(null);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (e) {
+      console.error('[checkAuth.php] Network error:', e);
+      setIsAdmin(false);
+      setAdminId(null);
+    }
+  };
 
-    checkAuth();
+  useEffect(() => {
+    checkAuthStatus().finally(() => setLoading(false));
   }, [API_BASE]);
 
   const logout = async () => {
@@ -89,7 +87,16 @@ export const AdminAuthProvider: React.FC<{ children: ReactNode }> = ({ children 
   if (loading && showLoader) return <div>Checking admin session...</div>;
 
   return (
-    <AdminAuthContext.Provider value={{ isAdmin, adminId, setIsAdmin, setAdminId, logout }}>
+    <AdminAuthContext.Provider
+      value={{
+        isAdmin,
+        adminId,
+        setIsAdmin,
+        setAdminId,
+        logout,
+        checkAuthStatus, // ✅ Return it from the context
+      }}
+    >
       {children}
     </AdminAuthContext.Provider>
   );
